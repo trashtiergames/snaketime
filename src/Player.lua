@@ -7,17 +7,21 @@ function Player:init(x, y, world)
   self.y = y
   self.z = 10
   self.speed = 50
-  self.img = love.graphics.newImage("art/snake.png")
-  self.quad = love.graphics.newQuad(0, 0, 16, 16, self.img:getDimensions())
   self.world = world
 
   self.keys = 0
   self.feather = false
 
+  -- self.stateMachine = StateMachine {
+  --     ["walk"] = function() return PlayerWalkState(self, self.world) end,
+  --     ["attack"] = function() return PlayerAttackState(self, self.world) end
+  -- }
+
+  -- We now pass states instead of functions into the statemachine
   self.stateMachine = StateMachine {
-      ['walk'] = function() return PlayerWalkState(self, self.world) end,
-      ['attack'] = function() return PlayerAttackState(self, self.world) end
-  }
+    ["walk"] = PlayerWalkState(self, self.world),
+    ["attack"] = PlayerAttackState(self, self.world)
+}
   self.stateMachine:change("walk")
 end
 

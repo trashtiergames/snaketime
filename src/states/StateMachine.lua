@@ -1,5 +1,5 @@
 --[[
-    Author: Colton Ogden
+    Original author: Colton Ogden
     cogden@cs50.harvard.edu
     License: Attribution-NonCommercial-ShareAlike 4.0 International 
     https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
@@ -22,7 +22,9 @@ end
 function StateMachine:change(stateName, enterParams)
 	assert(self.states[stateName]) -- state must exist!
 	self.current:exit()
-	self.current = self.states[stateName]()
+	-- Old functionality, tied to passing functions into statemachine
+	-- self.current = self.states[stateName]()
+	self.current = self.states[stateName]
 	self.current:enter(enterParams)
 end
 

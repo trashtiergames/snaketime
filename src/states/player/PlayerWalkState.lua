@@ -4,7 +4,6 @@ function PlayerWalkState:init(player, world)
   self.player = player
   self.world = world
   self.direction = "down"
-
   -- Animations are solved in a slightly odd way because I saved each direction
   -- as an individual file.
   self.img = {
@@ -20,7 +19,11 @@ function PlayerWalkState:init(player, world)
     ["left"] = anim8.newAnimation(grid('1-4',1), 0.1),
     ["right"] = anim8.newAnimation(grid('1-4',1), 0.1)
   }
-  self.animation = self.animations.left
+  self.animation = self.animations[self.direction]
+end
+
+function PlayerWalkState:enter(direction)
+  self.animation:gotoFrame(1)
 end
 
 function PlayerWalkState:update(dt)
@@ -62,6 +65,8 @@ function PlayerWalkState:update(dt)
     )
     self.direction = "right"
     self.animation = self.animations.right
+  elseif love.keyboard.isDown("space") then
+    self.player.stateMachine:change("attack", self.direction)
   else
     self.animation:pause()
   end
