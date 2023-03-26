@@ -65,12 +65,14 @@ function PlayerWalkState:update(dt)
     )
     self.direction = "right"
     self.animation = self.animations.right
-  elseif love.keyboard.isDown("space") then
-    self.player.stateMachine:change("attack", self.direction)
   else
     self.animation:pause()
   end
 
+  if love.keyboard.isDown("space") then
+    self.player.stateMachine:change("attack", self.direction)
+  end
+  
   self.animation:update(dt)
 
   -- Resolve collisions with things other than walls
