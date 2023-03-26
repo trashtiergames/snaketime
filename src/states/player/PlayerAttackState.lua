@@ -3,7 +3,6 @@ PlayerAttackState = Class{__includes = BaseState}
 function PlayerAttackState:init(player, world, direction)
   self.player = player
   self.world = world
-  -- self.direction = "down" or direction
 
   self.img = {
     ["up"] = love.graphics.newImage("art/player-attack-up.png"),
@@ -40,11 +39,27 @@ function PlayerAttackState:update(dt)
 end
 
 function PlayerAttackState:render()
+  local xOffset = {
+    ["up"] = 0,
+    ["down"] = 0,
+    ["left"] = -16,
+    ["right"] = 0
+  }
+  local yOffset = {
+    ["up"] = -16,
+    ["down"] = 0,
+    ["left"] = 0,
+    ["right"] = 0
+  }
+
   -- If last frame, change state
   if self.animation.position == #self.animation.frames then
     local params = {self.player, self.world, self.direction}
     self.player.stateMachine:change("walk", params)
   end
-  -- TODO offset properly depending on direction
-  self.animation:draw(self.img[self.direction], self.player.x, self.player.y)
+
+  -- Add offset depending on direction
+  local x = self.player.x + xOffset[self.direction]
+  local y = self.player.y + yOffset[self.direction]
+  self.animation:draw(self.img[self.direction], x, y)
 end
