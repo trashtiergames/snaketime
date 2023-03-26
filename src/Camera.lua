@@ -14,5 +14,8 @@ function Camera:update()
 end
 
 function Camera:render()
-    love.graphics.translate(-math.floor(self.x), -math.floor(self.y))
+    -- The löve2d docs advise only translating by whole numbers.
+    -- It seems to work like this as well. I suspect push.lua already takes
+    -- care of the problem, so we can leave it like this.
+    love.graphics.translate(-self.x, -self.y)
 end
