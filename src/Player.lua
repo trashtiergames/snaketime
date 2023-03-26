@@ -26,5 +26,6 @@ function Player:update(dt)
 end
 
 function Player:render()
-  love.graphics.draw(self.img, self.quad, self.x, self.y)
+  -- love.graphics.draw(self.img, self.quad, self.x, self.y)
+  self.stateMachine:render()
 end
