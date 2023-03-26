@@ -20,6 +20,7 @@ function PlayerWalkState:init(player, world)
     ["left"] = anim8.newAnimation(grid('1-4',1), 0.1),
     ["right"] = anim8.newAnimation(grid('1-4',1), 0.1)
   }
+  self.animation = self.animations.left
 end
 
 function PlayerWalkState:update(dt)
