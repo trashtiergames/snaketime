@@ -8,6 +8,7 @@ require "src/Tile"
 require "src/Key"
 require "src/Feather"
 require "src/Player"
+require "src/Egg"
 require "src/Camera"
 require "src/UI"
 require "src/filters"
@@ -21,6 +22,9 @@ require "src/states/TitleState"
 require "src/states/GameOverState"
 require "src/states/player/PlayerWalkState"
 require "src/states/player/PlayerAttackState"
+require "src/states/player/EggIdleState"
+require "src/states/player/EggWalkState"
+require "src/states/player/EggAttackState"
 
 function love.load()
   math.randomseed(os.time())

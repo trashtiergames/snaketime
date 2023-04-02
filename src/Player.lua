@@ -18,10 +18,10 @@ function Player:init(x, y, world)
   -- }
 
   -- We now pass states instead of functions into the statemachine
-  self.stateMachine = StateMachine {
+  self.stateMachine = StateMachine({
     ["walk"] = PlayerWalkState(self, self.world),
     ["attack"] = PlayerAttackState(self, self.world)
-  }
+  })
   
   self.stateMachine:change("walk")
 end
