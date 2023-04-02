@@ -1,11 +1,11 @@
--- Saves infos about tiles of the level
-
 Player = Class{}
 
 function Player:init(x, y, world)
   self.x = x
   self.y = y
   self.z = 10
+  self.height = 16
+  self.width = 16
   self.speed = 50
   self.world = world
 
@@ -21,7 +21,8 @@ function Player:init(x, y, world)
   self.stateMachine = StateMachine {
     ["walk"] = PlayerWalkState(self, self.world),
     ["attack"] = PlayerAttackState(self, self.world)
-}
+  }
+  
   self.stateMachine:change("walk")
 end
 

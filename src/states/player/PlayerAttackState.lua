@@ -3,6 +3,7 @@ PlayerAttackState = Class{__includes = BaseState}
 function PlayerAttackState:init(player, world, direction)
   self.player = player
   self.world = world
+  self.hitbox = none
 
   self.img = {
     ["up"] = love.graphics.newImage("art/player-attack-up.png"),
@@ -34,8 +35,54 @@ function PlayerAttackState:enter(direction)
   self.animation:gotoFrame(1)
 end
 
+function PlayerAttackState:exit()
+  -- Remove hitbox from world and self
+  self.world:remove(self.hitbox)
+  self.hitbox = none
+end
+
 function PlayerAttackState:update(dt)
   self.animation:update(dt)
+
+  -- Add hitbox to world on frame 2 (this will trigger a couple times)
+  if self.animation.position == 2 and not self.hitbox then
+    self.hitbox = Hitbox(0, 0, 16, 16)
+    if self.direction == "up" then
+      self.hitbox.x = self.player.x
+      self.hitbox.y = self.player.y - self.player.height
+    elseif self.direction == "down" then
+      self.hitbox.x = self.player.x
+      self.hitbox.y = self.player.y + self.player.height
+    elseif self.direction == "left" then
+      self.hitbox.x = self.player.x - self.player.width
+      self.hitbox.y = self.player.y
+    elseif self.direction == "right" then
+      self.hitbox.x = self.player.x + self.player.width
+      self.hitbox.y = self.player.y
+    end
+    self.world:add(self.hitbox, self.hitbox.x, self.hitbox.y, 
+      self.hitbox.width, self.hitbox.height)
+  end
+  
+  if self.hitbox then
+    -- This "moves" the hitbox to where it already is to detect collisions
+    _, _, cols, len = self.world:move(
+      self.hitbox, self.hitbox.x, self.hitbox.y, hitboxFilter)
+
+    for i=1, len do
+      local other = cols[i].other
+      
+      if other.isKey then
+        self.player.keys = self.player.keys + 1
+        self.world:remove(other)
+      elseif other.isFeather then
+        self.player.feather = true
+        self.world:remove(other)
+      elseif other.isEnemy then
+        other:takeDamage(1)
+      end
+    end
+  end
 end
 
 function PlayerAttackState:render()
