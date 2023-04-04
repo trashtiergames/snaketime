@@ -11,9 +11,15 @@ function playerFilter(player, other)
 end
 
 function hitboxFilter(hitbox, other)
-  if      other.isKey           then return "cross"
-  elseif  other.isFeather       then return "cross"
-  elseif  other.isEgg         then return "cross"
-  else                               return nil 
+  if      other.isKey       then return "cross"
+  elseif  other.isFeather   then return "cross"
+  elseif  other.isEgg       then return "cross"
+  else                           return nil 
+  end
+end
+
+function eggFilter(egg, other)
+  if      other.isWall      then return "slide"
+  else                           return nil 
   end
 end
