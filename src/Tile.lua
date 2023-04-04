@@ -15,6 +15,8 @@ function Tile:init(x, y, quadId, isWall, isDoor, isOpen)
   end
 end
 
+function Tile:update() end
+
 function Tile:render()
   love.graphics.draw(tileset, quads[self.quadId], self.x, self.y)
 end

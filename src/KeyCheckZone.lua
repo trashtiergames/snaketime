@@ -8,4 +8,6 @@ function KeyCheckZone:init(type)
   self.isKeyCheckZone = true
 end
 
+function KeyCheckZone:update() end
+
 function KeyCheckZone:render() end

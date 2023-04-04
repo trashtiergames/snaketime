@@ -11,6 +11,8 @@ function Key:init(x, y)
   self.isKey = true
 end
 
+function Key:update() end
+
 function Key:render()
   love.graphics.draw(self.img, self.quad, self.x, self.y)
 end

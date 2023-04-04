@@ -11,6 +11,8 @@ function Feather:init(x, y)
   self.isFeather = true
 end
 
+function Feather:update() end
+
 function Feather:render()
   love.graphics.draw(self.img, self.quad, self.x, self.y)
 end

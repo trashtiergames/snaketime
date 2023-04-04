@@ -10,10 +10,8 @@ function UI:init(player)
   self.heartQuad = love.graphics.newQuad(64, 0, 16, 16, self.itemsImg:getDimensions())
   self.halfHeartQuad = love.graphics.newQuad(80, 0, 16, 16, self.itemsImg:getDimensions())
 end
- 
-function UI:update()
-    
-end
+
+function UI:update() end
 
 function UI:render()
   love.graphics.origin()
