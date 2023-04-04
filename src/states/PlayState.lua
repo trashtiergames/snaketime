@@ -76,18 +76,18 @@ function PlayState:init()
     if instance["__identifier"] == "entities" then
       for _, entity in pairs(instance["entityInstances"]) do
         local x, y = entity.px[1], entity.px[2]
+        local width = entity["width"]
+        local height = entity["height"]
         if entity["__identifier"] == "key" then
           self.world:add(Key(x, y), x, y, quadSize, quadSize)
         elseif entity["__identifier"] == "feather" then
           self.world:add(Feather(x, y), x, y, quadSize, quadSize)
         elseif entity["__identifier"] == "key_check_zone" then
-          local width = entity["width"]
-          local height = entity["height"]
           self.world:add(KeyCheckZone("key"), x, y, width, height)
         elseif entity["__identifier"] == "feather_check_zone" then
-          local width = entity["width"]
-          local height = entity["height"]
           self.world:add(KeyCheckZone("feather"), x, y, width, height)
+        elseif entity["__identifier"] == "egg" then
+          self.world:add(Egg(x, y, self.world), x, y, width, height)
         end
       end
     end
@@ -114,6 +114,11 @@ function PlayState:update(dt)
     stateStacc:pop()
     stateStacc:push(PlayState())
     stateStacc:push(GameOverState())
+  end
+
+  if love.keyboard.wasPressed("r") then
+    stateStacc:pop()
+    stateStacc:push(PlayState())
   end
 
   self.camera:update()

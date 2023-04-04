@@ -13,11 +13,14 @@ function EggIdleState:init(egg, world)
     ["left"] = love.graphics.newQuad(32, 0, 16, 16, self.img),
     ["right"] = love.graphics.newQuad(48, 0, 16, 16, self.img)
   }
-  self.quad = self.quads.down
 end
 
 function EggIdleState:enter(direction)
-  self.quad = self.quads[direction]
+  if direction then
+    self.quad = self.quads[direction]
+  else
+    self.quad = self.quads.down
+  end
 end
 
 function EggIdleState:update(dt)
@@ -29,5 +32,5 @@ function EggIdleState:update(dt)
 end
 
 function EggIdleState:render()
-  love.graphics.draw(self.img, self.quad, self.x, self.y)
+  love.graphics.draw(self.img, self.quad, self.egg.x, self.egg.y)
 end

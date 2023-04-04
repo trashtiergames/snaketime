@@ -31,7 +31,6 @@ end
 function Egg:takeDamage(amount)
   self.hp = self.hp - amount
   if self.hp < 1 then
-    -- Will this work? :o
     self.world:remove(self)
   end
 end

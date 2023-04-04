@@ -22,9 +22,9 @@ require "src/states/TitleState"
 require "src/states/GameOverState"
 require "src/states/player/PlayerWalkState"
 require "src/states/player/PlayerAttackState"
-require "src/states/player/EggIdleState"
-require "src/states/player/EggWalkState"
-require "src/states/player/EggAttackState"
+require "src/states/egg/EggIdleState"
+require "src/states/egg/EggWalkState"
+require "src/states/egg/EggAttackState"
 
 function love.load()
   math.randomseed(os.time())

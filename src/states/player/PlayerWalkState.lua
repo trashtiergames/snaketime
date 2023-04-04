@@ -67,6 +67,9 @@ function PlayerWalkState:update(dt)
     self.animation = self.animations.right
   else
     self.animation:pause()
+    -- Still check if anything walks into player even if standing still
+    _, _, cols, len = self.world:move(
+      self.player, self.player.x, self.player.y, playerFilter)
   end
 
   if love.keyboard.isDown("space") then
@@ -87,6 +90,8 @@ function PlayerWalkState:update(dt)
     elseif other.isFeather then
       self.player.feather = true
       self.world:remove(other)
+    elseif other.isEgg and not self.player.invulnerable then
+      self.player:takeDamage(1)
     elseif other.isKeyCheckZone and playerHasKey then
       self.player.keys = self.player.keys - 1
       local doorOpened = true

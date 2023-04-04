@@ -78,9 +78,21 @@ function PlayerAttackState:update(dt)
       elseif other.isFeather then
         self.player.feather = true
         self.world:remove(other)
-      elseif other.isEnemy then
+      elseif other.isEgg then
         other:takeDamage(1)
       end
+    end
+  end
+
+  -- Check if an egg collides with player during player's attack animation
+  _, _, cols, len = self.world:move(
+    self.player, self.player.x, self.player.y, playerFilter)
+
+  for i=1, len do
+    local other = cols[i].other
+    
+    if other.isEgg and not self.player.invulnerable then
+      self.player:takeDamage(1)
     end
   end
 end
