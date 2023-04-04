@@ -7,108 +7,65 @@ function EggWalkState:init(egg, world)
   -- Animations are solved in a slightly odd way because I saved each direction
   -- as an individual file.
   self.img = {
-    ["up"] = love.graphics.newImage("art/player-walk-up.png"),
-    ["down"] = love.graphics.newImage("art/player-walk-down.png"),
-    ["left"] = love.graphics.newImage("art/player-walk-left.png"),
-    ["right"] = love.graphics.newImage("art/player-walk-right.png")
+    ["up"] = love.graphics.newImage("art/egg-walk-up.png"),
+    ["down"] = love.graphics.newImage("art/egg-walk-down.png"),
+    ["left"] = love.graphics.newImage("art/egg-walk-left.png"),
+    ["right"] = love.graphics.newImage("art/egg-walk-right.png")
   }
-  local grid = anim8.newGrid(16, 16, self.img.up:getWidth(), self.img.up:getHeight())
+  local grid = anim8.newGrid(
+    16, 16, self.img.up:getWidth(), self.img.up:getHeight())
+  local downGrid = anim8.newGrid(
+    16, 16, self.img.down:getWidth(), self.img.down:getHeight())
   self.animations = {
-    ["up"] = anim8.newAnimation(grid('1-4',1), 0.1),
-    ["down"] = anim8.newAnimation(grid('1-4',1), 0.1),
-    ["left"] = anim8.newAnimation(grid('1-4',1), 0.1),
-    ["right"] = anim8.newAnimation(grid('1-4',1), 0.1)
+    ["up"] = anim8.newAnimation(grid('1-2',1), 0.1),
+    ["down"] = anim8.newAnimation(downGrid('1-3',1), 0.1),
+    ["left"] = anim8.newAnimation(grid('1-2',1), 0.1),
+    ["right"] = anim8.newAnimation(grid('1-2',1), 0.1)
   }
   self.animation = self.animations[self.direction]
 end
 
 function EggWalkState:enter(direction)
+  self.animation = self.animations[self.direction]
   self.animation:gotoFrame(1)
 end
 
 function EggWalkState:update(dt)
-  local cols, len = {}, 0
-  self.animation:resume()
-  if love.keyboard.isDown("w") then
-    self.player.x, self.player.y, cols, len = self.world:move(
-      self.player, 
-      self.player.x, 
-      self.player.y - dt * self.player.speed,
-      playerFilter
-    )
-    self.direction = "up"
-    self.animation = self.animations.up
-  elseif love.keyboard.isDown("a") then
-    self.player.x, self.player.y, cols, len = self.world:move(
-      self.player, 
-      self.player.x - dt * self.player.speed, 
-      self.player.y,
-      playerFilter
-    )
-    self.direction = "left"
-    self.animation = self.animations.left
-  elseif love.keyboard.isDown("s") then
-    self.player.x, self.player.y, cols, len = self.world:move(
-      self.player, 
-      self.player.x, 
-      self.player.y + dt * self.player.speed,
-      playerFilter
-    )
-    self.direction = "down"
-    self.animation = self.animations.down
-  elseif love.keyboard.isDown("d") then
-    self.player.x, self.player.y, cols, len = self.world:move(
-      self.player, 
-      self.player.x + dt * self.player.speed, 
-      self.player.y,
-      playerFilter
-    )
-    self.direction = "right"
-    self.animation = self.animations.right
-  else
-    self.animation:pause()
-  end
+  --  TODO change the walking behavior, make it render, see Notability notes!
 
-  if love.keyboard.isDown("space") then
-    self.player.stateMachine:change("attack", self.direction)
+  if self.direction == "up" then
+    self.egg.x, self.egg.y, cols, len = self.world:move(
+      self.egg, 
+      self.egg.x, 
+      self.egg.y - dt * self.egg.speed,
+      eggFilter
+    )
+  elseif self.direction == "left" then
+    self.egg.x, self.egg.y, cols, len = self.world:move(
+      self.egg, 
+      self.egg.x - dt * self.egg.speed, 
+      self.egg.y,
+      eggFilter
+    )
+  elseif self.direction == "down" then
+    self.egg.x, self.egg.y, cols, len = self.world:move(
+      self.egg, 
+      self.egg.x, 
+      self.egg.y + dt * self.egg.speed,
+      eggFilter
+    )
+  elseif self.direction == "right" then
+    self.egg.x, self.egg.y, cols, len = self.world:move(
+      self.egg, 
+      self.egg.x + dt * self.egg.speed, 
+      self.egg.y,
+      eggFilter
+    )
   end
   
   self.animation:update(dt)
-
-  -- Resolve collisions with things other than walls
-  local playerHasKey = self.player.keys > 0
-
-  for i=1, len do
-    local other = cols[i].other
-    
-    if other.isKey then
-      self.player.keys = self.player.keys + 1
-      self.world:remove(other)
-    elseif other.isFeather then
-      self.player.feather = true
-      self.world:remove(other)
-    elseif other.isKeyCheckZone and playerHasKey then
-      self.player.keys = self.player.keys - 1
-      local doorOpened = true
-      local zone = cols[i].otherRect
-      local items, len = self.world:queryRect(zone.x, zone.y, zone.w, zone.h)
-      for _, item in pairs(items) do
-        if item.isWall then
-          item.isWall = false
-        end
-        if item.quadId then
-          if item.quadId == 41 then
-            item.quadId = 11
-          elseif item.quadId == 56 then
-            item.quadId = 26
-          end
-        end
-      end
-      self.world:remove(other)
-    end
-  end
 end
 
 function EggWalkState:render()
-  self.animation:draw(self.img[self.direction], self.player.x, self.player.y)
+  self.animation:draw(self.img[self.direction], self.egg.x, self.egg.y)
 end

@@ -87,7 +87,9 @@ function PlayState:init()
         elseif entity["__identifier"] == "feather_check_zone" then
           self.world:add(KeyCheckZone("feather"), x, y, width, height)
         elseif entity["__identifier"] == "egg" then
-          self.world:add(Egg(x, y, self.world), x, y, width, height)
+          local egg = Egg(x, y, self.world)
+          egg.stateMachine:change("walk", "down")
+          self.world:add(egg, x, y, width, height)
         end
       end
     end
@@ -107,7 +109,12 @@ end
 
 function PlayState:update(dt)
   -- Lots of stuff happening in here, see PlayerWalkState for the bulk of it
-  self.player:update(dt)
+
+  -- Sort by z to put player last, so deleted items such as eggs don't try to 
+  -- access themselves in the bump world.
+  for _, item in pairs(sortByZ(self.world:getItems())) do
+    item:update(dt)
+  end
 
   -- Game over placeholder
   if love.keyboard.wasPressed("y") then

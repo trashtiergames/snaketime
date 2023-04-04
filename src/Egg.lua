@@ -7,6 +7,8 @@ function Egg:init(x, y, world)
   self.height = 16
   self.width = 16
   self.speed = 50
+  self.attackTimer = 0
+  self.moveTimer = 0
   self.world = world
   self.isEgg = true
   self.hp = 1
@@ -14,7 +16,7 @@ function Egg:init(x, y, world)
   self.stateMachine = StateMachine {
     ["idle"] = EggIdleState(self, self.world),
     ["walk"] = EggWalkState(self, self.world),
-    ["attack"] = EggAttackState(self, self.world)
+    ["roll"] = EggRollState(self, self.world)
   }
   
   self.stateMachine:change("idle")

@@ -1,6 +1,6 @@
-EggAttackState = Class{__includes = BaseState}
+EggRollState = Class{__includes = BaseState}
 
-function EggAttackState:init(egg, world, direction)
+function EggRollState:init(egg, world, direction)
   self.egg = player
   self.world = world
   self.hitbox = none
@@ -29,19 +29,19 @@ function EggAttackState:init(egg, world, direction)
   }
 end
 
-function EggAttackState:enter(direction)
+function EggRollState:enter(direction)
   self.direction = direction
   self.animation = self.animations[self.direction]
   self.animation:gotoFrame(1)
 end
 
-function EggAttackState:exit()
+function EggRollState:exit()
   -- Remove hitbox from world and self
   self.world:remove(self.hitbox)
   self.hitbox = none
 end
 
-function EggAttackState:update(dt)
+function EggRollState:update(dt)
   self.animation:update(dt)
 
   -- Add hitbox to world on frame 2 (this will trigger a couple times)
@@ -85,7 +85,7 @@ function EggAttackState:update(dt)
   end
 end
 
-function EggAttackState:render()
+function EggRollState:render()
   local xOffset = {
     ["up"] = 0,
     ["down"] = 0,
