@@ -82,6 +82,10 @@ function PlayState:init()
           self.world:add(Key(x, y), x, y, quadSize, quadSize)
         elseif entity["__identifier"] == "feather" then
           self.world:add(Feather(x, y), x, y, quadSize, quadSize)
+        elseif entity["__identifier"] == "heart" then
+          self.world:add(Heart(x, y), x, y, quadSize, quadSize)
+        elseif entity["__identifier"] == "heart_container" then
+          self.world:add(HeartContainer(x, y), x, y, quadSize, quadSize)
         elseif entity["__identifier"] == "key_check_zone" then
           self.world:add(KeyCheckZone("key"), x, y, width, height)
         elseif entity["__identifier"] == "feather_check_zone" then

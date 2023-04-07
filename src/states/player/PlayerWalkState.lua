@@ -90,6 +90,13 @@ function PlayerWalkState:update(dt)
     elseif other.isFeather then
       self.player.feather = true
       self.world:remove(other)
+    elseif other.isHeartContainer then
+      self.player.maxHp = self.player.maxHp + 2
+      self.player.hp = self.player.hp + 2
+      self.world:remove(other)
+    elseif other.isHeart then
+      self.player.hp = self.player.hp + 2
+      self.world:remove(other)
     elseif other.isEgg and not self.player.invulnerable then
       self.player:takeDamage(1)
     elseif other.isKeyCheckZone and playerHasKey then

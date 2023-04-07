@@ -78,6 +78,13 @@ function PlayerAttackState:update(dt)
       elseif other.isFeather then
         self.player.feather = true
         self.world:remove(other)
+      elseif other.isHeart then
+        self.player.hp = self.player.hp + 2
+        self.world:remove(other)
+      elseif other.isHeartContainer then
+        self.player.maxHp = self.player.maxHp + 2
+        self.player.hp = self.player.hp + 2
+        self.world:remove(other)
       elseif other.isEgg then
         other:takeDamage(1)
       end
