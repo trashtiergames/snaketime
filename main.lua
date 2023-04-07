@@ -66,6 +66,8 @@ function love.load()
   stateStacc:push(PlayState())
   stateStacc:push(TitleState())
 
+  DIRECTIONS = {"up", "down", "left", "right"}
+
   love.keyboard.keysPressed = {}
 end
 

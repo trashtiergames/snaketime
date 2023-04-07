@@ -4,6 +4,8 @@ function EggWalkState:init(egg, world)
   self.egg = egg
   self.world = world
   self.direction = "down"
+  self.moveTimer = 0
+  self.moveDuration = 0
   -- Animations are solved in a slightly odd way because I saved each direction
   -- as an individual file.
   self.img = {
@@ -26,8 +28,11 @@ function EggWalkState:init(egg, world)
 end
 
 function EggWalkState:enter(direction)
-  self.animation = self.animations[self.direction]
+  self.animation = self.animations[direction]
   self.animation:gotoFrame(1)
+  self.moveTimer = 0
+  self.moveDuration = math.random(5)
+  self.direction = direction
 end
 
 function EggWalkState:update(dt)
@@ -62,10 +67,37 @@ function EggWalkState:update(dt)
       eggFilter
     )
   end
+
+  for _, col in pairs(cols) do
+    if col.other.isWall then
+      self.egg.stateMachine:change("walk", DIRECTIONS[math.random(4)])
+    end
+  end
   
   self.animation:update(dt)
+  self.moveTimer = self.moveTimer + dt
 end
 
 function EggWalkState:render()
   self.animation:draw(self.img[self.direction], self.egg.x, self.egg.y)
+
+  if self.moveTimer > self.moveDuration then
+    self.moveTimer = 0
+
+    if math.random(2) == 2 then
+      self.egg.stateMachine:change("idle", DIRECTIONS[math.random(4)])
+    else
+      self.egg.stateMachine:change("walk", DIRECTIONS[math.random(4)])
+    end
+  end
+end
+
+function EggWalkState:wallCollisionDetected(collisionList)
+  local hasCollidedBool = false
+  for _, col in pairs(collisionList) do
+    if col.other.isWall then
+      hasCollidedBool = true
+    end
+  end
+  return hasCollidedBool
 end

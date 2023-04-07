@@ -16,6 +16,8 @@ function EggIdleState:init(egg, world)
 end
 
 function EggIdleState:enter(direction)
+  self.moveTimer = 0
+  self.moveDuration = math.random(5)
   if direction then
     self.quad = self.quads[direction]
   else
@@ -24,11 +26,11 @@ function EggIdleState:enter(direction)
 end
 
 function EggIdleState:update(dt)
-  -- Eggs don't need keyboard input lol
-  -- if love.keyboard.isDown("e") then
-  --   -- eeee
-  --   self.egg.stateMachine:change("walk", "down")
-  -- end
+  self.moveTimer = self.moveTimer + dt
+  if self.moveTimer > self.moveDuration then
+    self.moveTimer = 0
+    self.egg.stateMachine:change("walk", [math.random(4)])
+  end
 end
 
 function EggIdleState:render()
