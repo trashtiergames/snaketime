@@ -29,7 +29,7 @@ function EggIdleState:update(dt)
   self.moveTimer = self.moveTimer + dt
   if self.moveTimer > self.moveDuration then
     self.moveTimer = 0
-    self.egg.stateMachine:change("walk", [math.random(4)])
+    self.egg.stateMachine:change("walk", DIRECTIONS[math.random(4)])
   end
 end
 

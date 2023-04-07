@@ -819,6 +819,20 @@
 							"defUid": 8,
 							"px": [240,976],
 							"fieldInstances": []
+						},
+						{
+							"__identifier": "heart_container",
+							"__grid": [13,60],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#BE4A2F",
+							"iid": "7db85b30-c640-11ed-aeb5-35e6a0aadf53",
+							"width": 16,
+							"height": 16,
+							"defUid": 9,
+							"px": [208,960],
+							"fieldInstances": []
 						}
 					]
 				},

@@ -10,6 +10,7 @@ function Player:init(x, y, world)
   self.world = world
   self.hp = 6
   self.maxHp = 6
+  self.isPlayer = true
 
   self.keys = 0
   self.feather = false

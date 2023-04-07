@@ -24,7 +24,7 @@ require "src/states/player/PlayerWalkState"
 require "src/states/player/PlayerAttackState"
 require "src/states/egg/EggIdleState"
 require "src/states/egg/EggWalkState"
-require "src/states/egg/EggAttackState"
+require "src/states/egg/EggRollState"
 
 function love.load()
   math.randomseed(os.time())
@@ -61,6 +61,11 @@ function love.load()
   -- Should import quads to be loaded like so:
   -- quads[0] = top left tile in spritesheet
   quads = generateQuads(tileset, quadSize, quadSize)
+
+  -- Load font
+  silkscreen = love.graphics.newFont('fonts/Silkscreen-Regular.ttf', 8)
+  basic = love.graphics.newFont('fonts/font.ttf', 8)
+  love.graphics.setFont(basic)
 
   stateStacc = StateStack()
   stateStacc:push(PlayState())
