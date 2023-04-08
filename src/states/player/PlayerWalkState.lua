@@ -23,6 +23,8 @@ function PlayerWalkState:init(player, world)
 end
 
 function PlayerWalkState:enter(direction)
+  self.direction = direction
+  self.animation = self.animations[self.direction]
   self.animation:gotoFrame(1)
 end
 

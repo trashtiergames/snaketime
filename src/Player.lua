@@ -27,7 +27,7 @@ function Player:init(x, y, world)
     ["attack"] = PlayerAttackState(self, self.world)
   })
   
-  self.stateMachine:change("walk")
+  self.stateMachine:change("walk", "down")
 end
 
 function Player:update(dt)
