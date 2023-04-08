@@ -40,8 +40,12 @@ end
 
 function Boss1AttackState:exit()
   -- Remove hitbox from world and self
-  self.world:remove(self.hitbox)
-  self.hitbox = none
+  -- It's possible that the boss loads another attack state while scanning,
+  -- so it may not have a hitbox yet
+  if self.hitbox then
+    self.world:remove(self.hitbox)
+    self.hitbox = none
+  end
 end
 
 function Boss1AttackState:update(dt)

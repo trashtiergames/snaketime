@@ -12,7 +12,7 @@ function Boss:init(x, y, world)
   self.world = world
   self.isBoss = true
   self.isScanning = true
-  self.phase = 1
+  self.phase = 2
   self.hp = 3
 
   -- Variables for being invulnerable after a hit (taken from CS50G code by
@@ -40,26 +40,28 @@ end
 function Boss:update(dt)
   self.attackTimer = self.attackTimer + dt
   if self.attackTimer > self.attackWaitAmount and self.isScanning then
-    -- Check if player in range above or below (two tiles)
-    local items, _ = self.world:queryRect(self.x, self.y - 32, 32, 80)
-    for _, item in pairs(items) do
-      if item.isPlayer then
-        if item.y < self.y then
-          self.stateMachine:change("attack-1", "up")
-        elseif item.y > self.y then
-          self.stateMachine:change("attack-1", "down")
+    if self.phase == 1 then
+      -- Check if player in range above or below (two tiles)
+      local items, _ = self.world:queryRect(self.x, self.y - 32, 32, 80)
+      for _, item in pairs(items) do
+        if item.isPlayer then
+          if item.y < self.y then
+            self.stateMachine:change("attack-1", "up")
+          elseif item.y > self.y then
+            self.stateMachine:change("attack-1", "down")
+          end
         end
       end
-    end
 
-    -- Check if player in range above or below (two tiles)
-    local items, _ = self.world:queryRect(self.x - 32, self.y, 80, 32)
-    for _, item in pairs(items) do
-      if item.isPlayer then
-        if item.x < self.x then
-          self.stateMachine:change("attack-1", "left")
-        elseif item.x > self.x then
-          self.stateMachine:change("attack-1", "right")
+      -- Check if player in range left or right (two tiles)
+      local items, _ = self.world:queryRect(self.x - 32, self.y, 80, 32)
+      for _, item in pairs(items) do
+        if item.isPlayer then
+          if item.x < self.x then
+            self.stateMachine:change("attack-1", "left")
+          elseif item.x > self.x then
+            self.stateMachine:change("attack-1", "right")
+          end
         end
       end
     end
@@ -81,7 +83,7 @@ function Boss:update(dt)
 end
 
 function Boss:render()
-  if self.invulnerable and self.flashTimer > 0.06 then
+  if self.flashTimer > 0.06 then
     self.flashTimer = 0
     love.graphics.setColor(1, 1, 1, 64/255)
   end

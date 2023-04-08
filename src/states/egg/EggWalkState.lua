@@ -68,7 +68,12 @@ function EggWalkState:update(dt)
 
   for _, col in pairs(cols) do
     if col.other.isWall then
-      self.egg.stateMachine:change("walk", DIRECTIONS[math.random(4)])
+      -- self.egg.stateMachine:change("walk", DIRECTIONS[math.random(4)])
+      local oldDirection = self.direction
+      while self.direction == oldDirection do
+        self.direction = DIRECTIONS[math.random(4)]
+        self.animation = self.animations[self.direction]
+      end
     end
   end
   

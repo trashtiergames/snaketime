@@ -11,7 +11,6 @@ function StateMachine:init(states)
 	self.empty = {
 		render = function() end,
 		update = function() end,
-		processAI = function() end,
 		enter = function() end,
 		exit = function() end
 	}

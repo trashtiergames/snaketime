@@ -37,12 +37,6 @@ function EggRollState:enter(direction)
   self.animation:gotoFrame(1)
 end
 
-function EggRollState:exit()
-  -- -- Remove hitbox from world and self
-  -- self.world:remove(self.hitbox)
-  -- self.hitbox = none
-end
-
 function EggRollState:update(dt)
   -- Change state if egg is about to restart roll anim
   self.animation:update(dt)

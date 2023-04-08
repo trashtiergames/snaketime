@@ -1,93 +1,43 @@
 BossWindUpState = Class{__includes = BaseState}
 
-function BossWindUpState:init(egg, world)
-  self.egg = egg
+function BossWindUpState:init(boss, world)
+  self.boss = boss
   self.world = world
-  self.animComplete = false
 
-  self.img = {
-    ["up"] = love.graphics.newImage("art/egg-attack-up.png"),
-    ["down"] = love.graphics.newImage("art/egg-attack-down.png"),
-    ["left"] = love.graphics.newImage("art/egg-attack-left.png"),
-    ["right"] = love.graphics.newImage("art/egg-attack-right.png")
-  }
-  local grids = {
-    ["up"] = anim8.newGrid(
-      16, 16, self.img.up:getWidth(), self.img.up:getHeight()),
-    ["down"] = anim8.newGrid(
-      16, 16, self.img.down:getWidth(), self.img.down:getHeight()),
-    ["left"] = anim8.newGrid(
-      16, 16, self.img.left:getWidth(), self.img.left:getHeight()),
-    ["right"] = anim8.newGrid(
-      16, 16, self.img.right:getWidth(), self.img.right:getHeight())
-  }
-  self.animations = {
-    ["up"] = anim8.newAnimation(grids.up('1-8',1), 0.1),
-    ["down"] = anim8.newAnimation(grids.down('1-8',1), 0.1),
-    ["left"] = anim8.newAnimation(grids.left('1-8',1), 0.1),
-    ["right"] = anim8.newAnimation(grids.right('1-8',1), 0.1)
-  }
+  self.img = love.graphics.newImage("art/boss/boss-2-attack-wind-up.png")
+  local grid = anim8.newGrid(48, 48, self.img:getWidth(), self.img:getHeight())
+  self.animation = anim8.newAnimation(grid('1-9',1), 0.1)
+  self.animComplete = false
 end
 
-function BossWindUpState:enter(direction)
-  self.direction = direction
-  self.animation = self.animations[self.direction]
-  self.animComplete = false
-  self.egg.attackTimer = 0
+function BossWindUpState:enter()
   self.animation:gotoFrame(1)
-end
+  self.animComplete = false
 
-function BossWindUpState:exit()
-  -- -- Remove hitbox from world and self
-  -- self.world:remove(self.hitbox)
-  -- self.hitbox = none
+  -- Change some details to process the bigger sprite correctly later
+  self.boss.width = 48
+  self.boss.height = 48
+  self.boss.x = self.boss.x - 7
+  self.boss.y = self.boss.y - 1
+  self.boss.x, self.boss.y, _, _ = self.world:move(
+    self.boss, self.boss.x, self.boss.y, bossFilter)
+  self.world:update(
+    self.boss, self.boss.x, self.boss.y, self.boss.width, self.boss.height)
 end
 
 function BossWindUpState:update(dt)
-  -- Change state if egg is about to restart roll anim
-  if self.animation.position == #self.animation.frames and self.animComplete then
-    self.egg.attackTimer = 0
-    self.egg.stateMachine:change("idle", DIRECTIONS[math.random(4)])
-  end
   self.animation:update(dt)
-  if self.animation.position > 5 then
-    if self.direction == "up" then
-      self.egg.x, self.egg.y, cols, len = self.world:move(
-        self.egg, 
-        self.egg.x, 
-        self.egg.y - dt * self.egg.speed * 2,
-        eggFilter
-      )
-    elseif self.direction == "left" then
-      self.egg.x, self.egg.y, cols, len = self.world:move(
-        self.egg, 
-        self.egg.x - dt * self.egg.speed * 2, 
-        self.egg.y,
-        eggFilter
-      )
-    elseif self.direction == "down" then
-      self.egg.x, self.egg.y, cols, len = self.world:move(
-        self.egg, 
-        self.egg.x, 
-        self.egg.y + dt * self.egg.speed * 2,
-        eggFilter
-      )
-    elseif self.direction == "right" then
-      self.egg.x, self.egg.y, cols, len = self.world:move(
-        self.egg, 
-        self.egg.x + dt * self.egg.speed * 2, 
-        self.egg.y,
-        eggFilter
-      )
-    end
+  if self.animation.position == 1 and self.animComplete then
+    self.boss.stateMachine:change("attack-2")
+    return
   end
 end
 
 function BossWindUpState:render()
-  self.animation:draw(self.img[self.direction], self.egg.x, self.egg.y)
-
   -- If last frame, change state
   if self.animation.position == #self.animation.frames then
     self.animComplete = true
   end
+
+  self.animation:draw(self.img, self.boss.x, self.boss.y)
 end

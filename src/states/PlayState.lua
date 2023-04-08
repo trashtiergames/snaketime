@@ -94,7 +94,7 @@ function PlayState:init()
           local egg = Egg(x, y, self.world)
           self.world:add(egg, x, y, width, height)
         elseif entity["__identifier"] == "boss" then
-          local boss = Boss(x, y, self.world)
+          boss = Boss(x, y, self.world)
           self.world:add(boss, x, y, width, height)
         end
       
@@ -133,6 +133,11 @@ function PlayState:update(dt)
   if love.keyboard.wasPressed("r") then
     stateStacc:pop()
     stateStacc:push(PlayState())
+  end
+
+  if love.keyboard.wasPressed("b") then
+    boss.stateMachine:change("wind-up")
+    boss.phase = 2
   end
 
   self.camera:update()

@@ -101,6 +101,8 @@ function PlayerWalkState:update(dt)
       self.world:remove(other)
     elseif other.isEgg then
       self.player:takeDamage(1)
+    elseif other.isBoss then
+      self.player:takeDamage(1)
     elseif other.isKeyCheckZone and playerHasKey then
       self.player.keys = self.player.keys - 1
       local doorOpened = true

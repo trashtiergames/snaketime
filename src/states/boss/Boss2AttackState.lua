@@ -1,93 +1,79 @@
 Boss2AttackState = Class{__includes = BaseState}
 
-function Boss2AttackState:init(egg, world)
-  self.egg = egg
+function Boss2AttackState:init(boss, world)
+  self.boss = boss
   self.world = world
-  self.animComplete = false
+  self.spinTimer = 0
+  self.spinLimit = 1
+  self.xSpeed = 50
+  self.ySpeed = 50
 
-  self.img = {
-    ["up"] = love.graphics.newImage("art/egg-attack-up.png"),
-    ["down"] = love.graphics.newImage("art/egg-attack-down.png"),
-    ["left"] = love.graphics.newImage("art/egg-attack-left.png"),
-    ["right"] = love.graphics.newImage("art/egg-attack-right.png")
-  }
-  local grids = {
-    ["up"] = anim8.newGrid(
-      16, 16, self.img.up:getWidth(), self.img.up:getHeight()),
-    ["down"] = anim8.newGrid(
-      16, 16, self.img.down:getWidth(), self.img.down:getHeight()),
-    ["left"] = anim8.newGrid(
-      16, 16, self.img.left:getWidth(), self.img.left:getHeight()),
-    ["right"] = anim8.newGrid(
-      16, 16, self.img.right:getWidth(), self.img.right:getHeight())
-  }
-  self.animations = {
-    ["up"] = anim8.newAnimation(grids.up('1-8',1), 0.1),
-    ["down"] = anim8.newAnimation(grids.down('1-8',1), 0.1),
-    ["left"] = anim8.newAnimation(grids.left('1-8',1), 0.1),
-    ["right"] = anim8.newAnimation(grids.right('1-8',1), 0.1)
-  }
+  self.img = love.graphics.newImage("art/boss/boss-2-attack.png")
+  local grid = anim8.newGrid(48, 48, self.img:getWidth(), self.img:getHeight())
+  self.animation = anim8.newAnimation(grid('1-6',1), 0.05)
 end
 
-function Boss2AttackState:enter(direction)
-  self.direction = direction
-  self.animation = self.animations[self.direction]
-  self.animComplete = false
-  self.egg.attackTimer = 0
+function Boss2AttackState:enter()
+  self.xSpeed = math.random(30,60)
+  self.ySpeed = math.random(30,60)
+  if math.random(2) == 2 then
+    self.xSpeed = -self.xSpeed
+  end
+  if math.random(2) == 2 then
+    self.ySpeed = -self.ySpeed
+  end
+  self.spinTimer = 0
   self.animation:gotoFrame(1)
 end
 
 function Boss2AttackState:exit()
-  -- -- Remove hitbox from world and self
-  -- self.world:remove(self.hitbox)
-  -- self.hitbox = none
+  
 end
 
 function Boss2AttackState:update(dt)
-  -- Change state if egg is about to restart roll anim
-  if self.animation.position == #self.animation.frames and self.animComplete then
-    self.egg.attackTimer = 0
-    self.egg.stateMachine:change("idle", DIRECTIONS[math.random(4)])
+  self.spinTimer = self.spinTimer + dt
+  if self.spinTimer > self.spinLimit then
+    self.spinTimer = 0
+    self.boss.stateMachine:change("wind-down")
   end
+
   self.animation:update(dt)
-  if self.animation.position > 5 then
-    if self.direction == "up" then
-      self.egg.x, self.egg.y, cols, len = self.world:move(
-        self.egg, 
-        self.egg.x, 
-        self.egg.y - dt * self.egg.speed * 2,
-        eggFilter
-      )
-    elseif self.direction == "left" then
-      self.egg.x, self.egg.y, cols, len = self.world:move(
-        self.egg, 
-        self.egg.x - dt * self.egg.speed * 2, 
-        self.egg.y,
-        eggFilter
-      )
-    elseif self.direction == "down" then
-      self.egg.x, self.egg.y, cols, len = self.world:move(
-        self.egg, 
-        self.egg.x, 
-        self.egg.y + dt * self.egg.speed * 2,
-        eggFilter
-      )
-    elseif self.direction == "right" then
-      self.egg.x, self.egg.y, cols, len = self.world:move(
-        self.egg, 
-        self.egg.x + dt * self.egg.speed * 2, 
-        self.egg.y,
-        eggFilter
-      )
+  self.boss.x, self.boss.y, cols, len = self.world:move(
+    self.boss, 
+    self.boss.x + dt * self.xSpeed, 
+    self.boss.y + dt * self.ySpeed,
+    bossSpinFilter
+  )
+  for i=1, len do
+    local col = cols[i]
+    local nx = col.normal.x
+    local ny = col.normal.y
+
+    if nx ~= 0 then
+      self.xDir = nx
+      self.xSpeed = -self.xSpeed
+    end
+    if ny ~= 0 then
+      self.yDir = ny
+      self.ySpeed = -self.ySpeed
     end
   end
+
+  -- if self.xSpeed > 0 and self.xSpeed < 50 then
+  --   self.xSpeed = self.xSpeed + self.xSpeed * dt
+  -- elseif self.xSpeed < 0 and self.xSpeed > -50 then
+  --   self.xSpeed = self.xSpeed - self.xAccel * dt
+  -- end
+
+  -- if self.ySpeed > 0 and self.ySpeed < 50 then
+  --   self.ySpeed = self.ySpeed + self.ySpeed * dt
+  -- elseif self.ySpeed < 0 and self.ySpeed > -50 then
+  --   self.ySpeed = self.ySpeed - self.yAccel * dt
+  -- end
+  -- print("xSpeed:", self.xSpeed)
+  -- print("ySpeed:", self.ySpeed)
 end
 
 function Boss2AttackState:render()
-  self.animation:draw(self.img[self.direction], self.egg.x, self.egg.y)
-
-  -- If last frame, change state
-  if self.animation.position == #self.animation.frames then
-    self.animComplete = true
-  end
+  self.animation:draw(self.img, self.boss.x, self.boss.y)
 end
