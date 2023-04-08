@@ -31,7 +31,6 @@ function Boss1AttackState:init(boss, world, direction)
 end
 
 function Boss1AttackState:enter(direction)
-  print("Attack state enter called")
   self.direction = direction
   self.animComplete = false
   self.animation = self.animations[self.direction]
@@ -47,7 +46,6 @@ end
 
 function Boss1AttackState:update(dt)
   self.animation:update(dt)
-  print(self.animation.position)
 
   -- Change state if animation has just ended
   if self.animation.position == 1 and self.animComplete then

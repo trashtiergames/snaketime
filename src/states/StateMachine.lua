@@ -22,12 +22,10 @@ end
 function StateMachine:change(stateName, enterParams)
 	assert(self.states[stateName]) -- state must exist!
 	self.current:exit()
-	print("Old state successfully exited")
 	-- Old functionality, tied to passing functions into statemachine
 	-- self.current = self.states[stateName]()
 	self.current = self.states[stateName]
 	self.current:enter(enterParams)
-	print("New state successfully entered")
 end
 
 function StateMachine:update(dt)
