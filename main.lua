@@ -25,6 +25,7 @@ require "src/states/BaseState"
 require "src/states/PlayState"
 require "src/states/TitleState"
 require "src/states/GameOverState"
+require "src/states/WinState"
 
 require "src/states/player/PlayerWalkState"
 require "src/states/player/PlayerAttackState"

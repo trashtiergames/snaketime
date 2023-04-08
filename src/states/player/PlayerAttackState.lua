@@ -93,6 +93,8 @@ function PlayerAttackState:update(dt)
         self.world:remove(other)
       elseif other.isEgg then
         other:takeDamage(1)
+      elseif other.isBoss then
+        other:takeDamage(1)
       end
     end
   end
@@ -104,7 +106,9 @@ function PlayerAttackState:update(dt)
   for i=1, len do
     local other = cols[i].other
     
-    if other.isEgg and not self.player.invulnerable then
+    if other.isEgg then
+      self.player:takeDamage(1)
+    elseif other.isBoss then
       self.player:takeDamage(1)
     end
   end
@@ -132,8 +136,6 @@ function PlayerAttackState:render()
 
   -- If last frame, change state
   if self.animation.position == #self.animation.frames then
-    -- local params = {self.player, self.world, self.direction}
-    -- self.player.stateMachine:change("walk", params)
     self.animComplete = true
   end
 end

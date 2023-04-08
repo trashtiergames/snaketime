@@ -11,8 +11,16 @@ function Boss:init(x, y, world)
   self.attackWaitAmount = 3
   self.world = world
   self.isBoss = true
+  self.isScanning = true
   self.phase = 1
-  self.hp = 1
+  self.hp = 3
+
+  -- Variables for being invulnerable after a hit (taken from CS50G code by
+  -- Colton Ogden, cogden@cs50.harvard.edu)
+  self.invulnerable = false
+  self.invulnerableDuration = 0
+  self.invulnerableTimer = 0
+  self.flashTimer = 0
 
   self.stateMachine = StateMachine {
     ["idle-1"] = Boss1IdleState(self, self.world),
@@ -31,7 +39,7 @@ end
 
 function Boss:update(dt)
   self.attackTimer = self.attackTimer + dt
-  if self.attackTimer > self.attackWaitAmount then
+  if self.attackTimer > self.attackWaitAmount and self.isScanning then
     -- Check if player in range above or below (two tiles)
     local items, _ = self.world:queryRect(self.x, self.y - 32, 32, 80)
     for _, item in pairs(items) do
@@ -56,16 +64,48 @@ function Boss:update(dt)
       end
     end
   end
+
+  if self.invulnerable then
+    self.flashTimer = self.flashTimer + dt
+    self.invulnerableTimer = self.invulnerableTimer + dt
+
+    if self.invulnerableTimer > self.invulnerableDuration then
+        self.invulnerable = false
+        self.invulnerableTimer = 0
+        self.invulnerableDuration = 0
+        self.flashTimer = 0
+    end
+  end
+
   self.stateMachine:update(dt)
 end
 
 function Boss:render()
+  if self.invulnerable and self.flashTimer > 0.06 then
+    self.flashTimer = 0
+    love.graphics.setColor(1, 1, 1, 64/255)
+  end
   self.stateMachine:render()
+  love.graphics.setColor(1, 1, 1, 1)
+end
+
+-- Taken from CS50G code by Colton Ogden, cogden@cs50.harvard.edu
+function Boss:goInvulnerable(duration)
+  self.invulnerable = true
+  self.invulnerableDuration = duration
 end
 
 function Boss:takeDamage(amount)
+  if self.invulnerable then
+    return
+  end
   self.hp = self.hp - amount
-  if self.hp < 1 then
+  self:goInvulnerable(1)
+  if self.hp < 1 and self.phase == 1 then
+    self.hp = 3
+    self.stateMachine:change("transform")
+  elseif self.hp < 1 and self.phase == 2 then
     self.world:remove(self)
+    stateStacc:push(WinState())
   end
 end

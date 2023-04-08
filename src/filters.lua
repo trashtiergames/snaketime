@@ -16,6 +16,7 @@ function hitboxFilter(hitbox, other)
   if      other.isKey             then return "cross"
   elseif  other.isFeather         then return "cross"
   elseif  other.isEgg             then return "cross"
+  elseif  other.isBoss             then return "cross"
   elseif  other.isHeart           then return "cross"
   elseif  other.isHeartContainer  then return "cross"
   else                                 return nil 
