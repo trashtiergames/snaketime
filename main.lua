@@ -11,22 +11,37 @@ require "src/Heart"
 require "src/HeartContainer"
 require "src/Player"
 require "src/Egg"
+require "src/Boss"
 require "src/Camera"
 require "src/UI"
 require "src/filters"
 require "src/KeyCheckZone"
 require "src/Hitbox"
+
 require "src/states/StateStack"
 require "src/states/StateMachine"
 require "src/states/BaseState"
+
 require "src/states/PlayState"
 require "src/states/TitleState"
 require "src/states/GameOverState"
+
 require "src/states/player/PlayerWalkState"
 require "src/states/player/PlayerAttackState"
+
 require "src/states/egg/EggIdleState"
 require "src/states/egg/EggWalkState"
 require "src/states/egg/EggRollState"
+
+require "src/states/boss/Boss1IdleState"
+require "src/states/boss/Boss1WalkState"
+require "src/states/boss/Boss1AttackState"
+require "src/states/boss/BossTransformState"
+require "src/states/boss/Boss2IdleState"
+require "src/states/boss/Boss2WalkState"
+require "src/states/boss/Boss2AttackState"
+require "src/states/boss/BossWindUpState"
+require "src/states/boss/BossWindDownState"
 
 function love.load()
   math.randomseed(os.time())

@@ -99,7 +99,7 @@ function PlayerWalkState:update(dt)
     elseif other.isHeart then
       self.player.hp = self.player.hp + 2
       self.world:remove(other)
-    elseif other.isEgg and not self.player.invulnerable then
+    elseif other.isEgg then
       self.player:takeDamage(1)
     elseif other.isKeyCheckZone and playerHasKey then
       self.player.keys = self.player.keys - 1

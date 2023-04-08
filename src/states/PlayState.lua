@@ -92,9 +92,12 @@ function PlayState:init()
           self.world:add(KeyCheckZone("feather"), x, y, width, height)
         elseif entity["__identifier"] == "egg" then
           local egg = Egg(x, y, self.world)
-          egg.stateMachine:change("walk", "down")
           self.world:add(egg, x, y, width, height)
+        elseif entity["__identifier"] == "boss" then
+          local boss = Boss(x, y, self.world)
+          self.world:add(boss, x, y, width, height)
         end
+      
       end
     end
   end 

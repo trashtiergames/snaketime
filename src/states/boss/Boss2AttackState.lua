@@ -1,6 +1,6 @@
-EggRollState = Class{__includes = BaseState}
+Boss2AttackState = Class{__includes = BaseState}
 
-function EggRollState:init(egg, world)
+function Boss2AttackState:init(egg, world)
   self.egg = egg
   self.world = world
   self.animComplete = false
@@ -29,7 +29,7 @@ function EggRollState:init(egg, world)
   }
 end
 
-function EggRollState:enter(direction)
+function Boss2AttackState:enter(direction)
   self.direction = direction
   self.animation = self.animations[self.direction]
   self.animComplete = false
@@ -37,21 +37,19 @@ function EggRollState:enter(direction)
   self.animation:gotoFrame(1)
 end
 
-function EggRollState:exit()
+function Boss2AttackState:exit()
   -- -- Remove hitbox from world and self
   -- self.world:remove(self.hitbox)
   -- self.hitbox = none
 end
 
-function EggRollState:update(dt)
+function Boss2AttackState:update(dt)
   -- Change state if egg is about to restart roll anim
-  self.animation:update(dt)
-  
-  if self.animation.position == 1 and self.animComplete then
+  if self.animation.position == #self.animation.frames and self.animComplete then
     self.egg.attackTimer = 0
     self.egg.stateMachine:change("idle", DIRECTIONS[math.random(4)])
   end
-
+  self.animation:update(dt)
   if self.animation.position > 5 then
     if self.direction == "up" then
       self.egg.x, self.egg.y, cols, len = self.world:move(
@@ -85,7 +83,7 @@ function EggRollState:update(dt)
   end
 end
 
-function EggRollState:render()
+function Boss2AttackState:render()
   self.animation:draw(self.img[self.direction], self.egg.x, self.egg.y)
 
   -- If last frame, change state

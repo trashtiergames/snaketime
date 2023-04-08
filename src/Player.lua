@@ -62,6 +62,9 @@ function Player:goInvulnerable(duration)
 end
 
 function Player:takeDamage(amount)
+  if self.invulnerable then
+    return
+  end
   self.hp = self.hp - amount
   self:goInvulnerable(1)
   if self.hp < 1 then

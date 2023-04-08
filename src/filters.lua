@@ -22,6 +22,12 @@ function hitboxFilter(hitbox, other)
   end
 end
 
+function boss1HitboxFilter(hitbox, other)
+  if      other.isPlayer  then return "cross"
+  else                         return nil 
+  end
+end
+
 function eggFilter(egg, other)
   if      other.isWall  then return "slide"
   else                       return nil 

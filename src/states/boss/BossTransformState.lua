@@ -1,10 +1,9 @@
-PlayerAttackState = Class{__includes = BaseState}
+BossTransformState = Class{__includes = BaseState}
 
-function PlayerAttackState:init(player, world, direction)
+function BossTransformState:init(player, world, direction)
   self.player = player
   self.world = world
   self.hitbox = none
-  self.animComplete = false
 
   self.img = {
     ["up"] = love.graphics.newImage("art/player-attack-up.png"),
@@ -30,27 +29,22 @@ function PlayerAttackState:init(player, world, direction)
   }
 end
 
-function PlayerAttackState:enter(direction)
+function BossTransformState:enter(direction)
   self.direction = direction
-  self.animComplete = false
   self.animation = self.animations[self.direction]
   self.animation:gotoFrame(1)
 end
 
-function PlayerAttackState:exit()
+function BossTransformState:exit()
   -- Remove hitbox from world and self
   self.world:remove(self.hitbox)
   self.hitbox = none
 end
 
-function PlayerAttackState:update(dt)
+function BossTransformState:update(dt)
   self.animation:update(dt)
-  
-  if self.animation.position == 1 and self.animComplete then
-    self.player.stateMachine:change("walk", self.direction)
-  end
 
-  -- Add hitbox to world on frame 2
+  -- Add hitbox to world on frame 2 (this will trigger a couple times)
   if self.animation.position == 2 and not self.hitbox then
     self.hitbox = Hitbox(0, 0, 16, 16)
     if self.direction == "up" then
@@ -108,11 +102,9 @@ function PlayerAttackState:update(dt)
       self.player:takeDamage(1)
     end
   end
-
-  
 end
 
-function PlayerAttackState:render()
+function BossTransformState:render()
   local xOffset = {
     ["up"] = 0,
     ["down"] = 0,
@@ -125,15 +117,15 @@ function PlayerAttackState:render()
     ["left"] = 0,
     ["right"] = 0
   }
+
+  -- If last frame, change state
+  if self.animation.position == #self.animation.frames then
+    local params = {self.player, self.world, self.direction}
+    self.player.stateMachine:change("walk", params)
+  end
+
   -- Add offset depending on direction
   local x = self.player.x + xOffset[self.direction]
   local y = self.player.y + yOffset[self.direction]
   self.animation:draw(self.img[self.direction], x, y)
-
-  -- If last frame, change state
-  if self.animation.position == #self.animation.frames then
-    -- local params = {self.player, self.world, self.direction}
-    -- self.player.stateMachine:change("walk", params)
-    self.animComplete = true
-  end
 end
