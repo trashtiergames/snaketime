@@ -12,7 +12,7 @@ function Boss:init(x, y, world)
   self.world = world
   self.isBoss = true
   self.isScanning = true
-  self.phase = 2
+  self.phase = 1
   self.hp = 3
 
   -- Variables for being invulnerable after a hit (taken from CS50G code by

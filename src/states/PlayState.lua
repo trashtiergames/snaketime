@@ -3,6 +3,8 @@
 PlayState = Class{__includes = BaseState}
 
 function PlayState:init()
+  -- Remember enemies for later
+  self.eggs = {}
   -- Prep world
   self.world = bump.newWorld(quadSize)
   for _, instance in pairs(level.layerInstances) do
@@ -90,9 +92,20 @@ function PlayState:init()
           self.world:add(KeyCheckZone("key"), x, y, width, height)
         elseif entity["__identifier"] == "feather_check_zone" then
           self.world:add(KeyCheckZone("feather"), x, y, width, height)
+        elseif entity["__identifier"] == "post_combat_door_zone" then
+          self.world:add(
+            DoorOpenZone(x, y, width, height),
+            x, y, width, height)
+        elseif entity["__identifier"] == "enter_boss_trigger" then
+          self.world:add(EnterTriggerZone(), x, y, width, height)
+        elseif entity["__identifier"] == "dramatic_close_doors" then
+          self.world:add(
+            DramaticDoorCloseZone(x, y, width, height),
+            x, y, width, height)
         elseif entity["__identifier"] == "egg" then
-          local egg = Egg(x, y, self.world)
+          local egg = Egg(x, y, self.world, self.eggs)
           self.world:add(egg, x, y, width, height)
+          table.insert(self.eggs, egg)
         elseif entity["__identifier"] == "boss" then
           boss = Boss(x, y, self.world)
           self.world:add(boss, x, y, width, height)
@@ -121,6 +134,34 @@ function PlayState:update(dt)
   -- access themselves in the bump world.
   for _, item in pairs(sortByZ(self.world:getItems())) do
     item:update(dt)
+  end
+
+  if #self.eggs == 0 then
+    local zonesToOpen = {}
+    for _, item in pairs(sortByZ(self.world:getItems())) do
+      if item.isDoorOpenZone then
+        table.insert(zonesToOpen, item)
+      end
+    end
+    for _, zone in pairs(zonesToOpen) do
+      local items, _ = self.world:queryRect(zone.x, zone.y, zone.w, zone.h)
+      for _, item in pairs(items) do
+        if item.isWall then
+          item.isWall = false
+        end
+        if item.quadId then
+          if item.quadId == 84 then
+            item.quadId = 9
+          elseif item.quadId == 85 then
+            item.quadId = 10
+          elseif item.quadId == 87 then
+            item.quadId = 12
+          elseif item.quadId == 102 then
+            item.quadId = 27
+          end
+        end
+      end
+    end
   end
 
   -- Game over placeholder

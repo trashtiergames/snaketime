@@ -1,6 +1,6 @@
 Egg = Class{}
 
-function Egg:init(x, y, world)
+function Egg:init(x, y, world, eggList)
   self.x = x
   self.y = y
   self.z = 9
@@ -11,7 +11,8 @@ function Egg:init(x, y, world)
   self.attackWaitAmount = 3
   self.world = world
   self.isEgg = true
-  self.hp = 3
+  self.hp = 1
+  self.eggs = eggList
 
   -- Variables for being invulnerable after a hit (taken from CS50G code by
   -- Colton Ogden, cogden@cs50.harvard.edu)
@@ -95,5 +96,14 @@ function Egg:takeDamage(amount)
   self:goInvulnerable(1)
   if self.hp < 1 then
     self.world:remove(self)
+
+    -- Complicated way needed to remove specific item from table
+    local idToRemove
+    for i, egg in ipairs(self.eggs) do 
+      if egg == self then
+        idToRemove = i
+      end
+    end
+    table.remove(self.eggs, i)
   end
 end

@@ -15,8 +15,12 @@ require "src/Boss"
 require "src/Camera"
 require "src/UI"
 require "src/filters"
-require "src/KeyCheckZone"
 require "src/Hitbox"
+
+require "src/KeyCheckZone"
+require "src/DoorOpenZone"
+require "src/DramaticDoorCloseZone"
+require "src/EnterTriggerZone"
 
 require "src/states/StateStack"
 require "src/states/StateMachine"

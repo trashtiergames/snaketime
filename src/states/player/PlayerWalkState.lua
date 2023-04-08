@@ -103,20 +103,67 @@ function PlayerWalkState:update(dt)
       self.player:takeDamage(1)
     elseif other.isBoss then
       self.player:takeDamage(1)
-    elseif other.isKeyCheckZone and playerHasKey then
-      self.player.keys = self.player.keys - 1
-      local doorOpened = true
-      local zone = cols[i].otherRect
-      local items, len = self.world:queryRect(zone.x, zone.y, zone.w, zone.h)
-      for _, item in pairs(items) do
-        if item.isWall then
-          item.isWall = false
+    elseif other.isKeyCheckZone then
+      if other.type == "key" and playerHasKey then
+        self.player.keys = self.player.keys - 1
+        local zone = cols[i].otherRect
+        local items, len = self.world:queryRect(zone.x, zone.y, zone.w, zone.h)
+        for _, item in pairs(items) do
+          if item.isWall then
+            item.isWall = false
+          end
+          if item.quadId then
+            if item.quadId == 41 then
+              item.quadId = 11
+            elseif item.quadId == 56 then
+              item.quadId = 26
+            end
+          end
         end
-        if item.quadId then
-          if item.quadId == 41 then
-            item.quadId = 11
-          elseif item.quadId == 56 then
-            item.quadId = 26
+        self.world:remove(other)
+      elseif other.type == "feather" and self.player.feather then
+        self.player.feather = false
+        local zone = cols[i].otherRect
+        local items, len = self.world:queryRect(zone.x, zone.y, zone.w, zone.h)
+        for _, item in pairs(items) do
+          if item.isWall then
+            item.isWall = false
+          end
+          if item.quadId then
+            if item.quadId == 71 then
+              item.quadId = 69
+            elseif item.quadId == 72 then
+              item.quadId = 70
+            end
+          end
+        end
+        self.world:remove(other)
+      end
+    elseif other.isEnterTriggerZone then
+      print("EnterTriggerZone entered")
+      local zonesToClose = {}
+      for _, item in pairs(sortByZ(self.world:getItems())) do
+        if item.isDramaticDoorCloseZone then
+          table.insert(zonesToClose, item)
+        end
+      end
+      for _, zone in pairs(zonesToClose) do
+        local items, _ = self.world:queryRect(zone.x, zone.y, zone.w, zone.h)
+        for _, item in pairs(items) do
+          print("closing doors")
+          if item.isWall == false then
+            item.isWall = true
+          end
+          if item.quadId then
+            if item.quadId == 9 then
+              item.quadId = 84
+            elseif item.quadId == 10 then
+              item.quadId = 85
+            elseif item.quadId == 24 then
+              item.quadId = 99
+            elseif item.quadId == 25 then
+              item.quadId = 100
+            end
           end
         end
       end
