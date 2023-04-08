@@ -33,3 +33,9 @@ function eggFilter(egg, other)
   else                       return nil 
   end
 end
+
+function bossFilter(boss, other)
+  if      other.isWall  then return "slide"
+  else                       return nil 
+  end
+end

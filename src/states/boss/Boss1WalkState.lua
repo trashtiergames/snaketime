@@ -1,7 +1,7 @@
 Boss1WalkState = Class{__includes = BaseState}
 
-function Boss1WalkState:init(egg, world)
-  self.egg = egg
+function Boss1WalkState:init(boss, world)
+  self.boss = boss
   self.world = world
   self.direction = "down"
   self.moveTimer = 0
@@ -9,20 +9,18 @@ function Boss1WalkState:init(egg, world)
   -- Animations are solved in a slightly odd way because I saved each direction
   -- as an individual file.
   self.img = {
-    ["up"] = love.graphics.newImage("art/egg-walk-up.png"),
-    ["down"] = love.graphics.newImage("art/egg-walk-down.png"),
-    ["left"] = love.graphics.newImage("art/egg-walk-left.png"),
-    ["right"] = love.graphics.newImage("art/egg-walk-right.png")
+    ["up"] = love.graphics.newImage("art/boss/boss-walk-up.png"),
+    ["down"] = love.graphics.newImage("art/boss/boss-walk-down.png"),
+    ["left"] = love.graphics.newImage("art/boss/boss-walk-left.png"),
+    ["right"] = love.graphics.newImage("art/boss/boss-walk-right.png")
   }
   local grid = anim8.newGrid(
-    16, 16, self.img.up:getWidth(), self.img.up:getHeight())
-  local downGrid = anim8.newGrid(
-    16, 16, self.img.down:getWidth(), self.img.down:getHeight())
+    32, 32, self.img.up:getWidth(), self.img.up:getHeight())
   self.animations = {
-    ["up"] = anim8.newAnimation(grid('1-2',1), 0.1),
-    ["down"] = anim8.newAnimation(downGrid('1-3',1), 0.1),
-    ["left"] = anim8.newAnimation(grid('1-2',1), 0.1),
-    ["right"] = anim8.newAnimation(grid('1-2',1), 0.1)
+    ["up"] = anim8.newAnimation(grid('1-4',1), 0.1),
+    ["down"] = anim8.newAnimation(grid('1-4',1), 0.1),
+    ["left"] = anim8.newAnimation(grid('1-4',1), 0.1),
+    ["right"] = anim8.newAnimation(grid('1-4',1), 0.1)
   }
   self.animation = self.animations[self.direction]
 end
@@ -36,41 +34,39 @@ function Boss1WalkState:enter(direction)
 end
 
 function Boss1WalkState:update(dt)
-  --  TODO change the walking behavior, make it render, see Notability notes!
-
   if self.direction == "up" then
-    self.egg.x, self.egg.y, cols, len = self.world:move(
-      self.egg, 
-      self.egg.x, 
-      self.egg.y - dt * self.egg.speed,
-      eggFilter
+    self.boss.x, self.boss.y, cols, len = self.world:move(
+      self.boss, 
+      self.boss.x, 
+      self.boss.y - dt * self.boss.speed,
+      bossFilter
     )
   elseif self.direction == "left" then
-    self.egg.x, self.egg.y, cols, len = self.world:move(
-      self.egg, 
-      self.egg.x - dt * self.egg.speed, 
-      self.egg.y,
-      eggFilter
+    self.boss.x, self.boss.y, cols, len = self.world:move(
+      self.boss, 
+      self.boss.x - dt * self.boss.speed, 
+      self.boss.y,
+      bossFilter
     )
   elseif self.direction == "down" then
-    self.egg.x, self.egg.y, cols, len = self.world:move(
-      self.egg, 
-      self.egg.x, 
-      self.egg.y + dt * self.egg.speed,
-      eggFilter
+    self.boss.x, self.boss.y, cols, len = self.world:move(
+      self.boss, 
+      self.boss.x, 
+      self.boss.y + dt * self.boss.speed,
+      bossFilter
     )
   elseif self.direction == "right" then
-    self.egg.x, self.egg.y, cols, len = self.world:move(
-      self.egg, 
-      self.egg.x + dt * self.egg.speed, 
-      self.egg.y,
-      eggFilter
+    self.boss.x, self.boss.y, cols, len = self.world:move(
+      self.boss, 
+      self.boss.x + dt * self.boss.speed, 
+      self.boss.y,
+      bossFilter
     )
   end
 
   for _, col in pairs(cols) do
     if col.other.isWall then
-      self.egg.stateMachine:change("walk", DIRECTIONS[math.random(4)])
+      self.boss.stateMachine:change("walk-1", DIRECTIONS[math.random(4)])
     end
   end
   
@@ -79,25 +75,15 @@ function Boss1WalkState:update(dt)
 end
 
 function Boss1WalkState:render()
-  self.animation:draw(self.img[self.direction], self.egg.x, self.egg.y)
+  self.animation:draw(self.img[self.direction], self.boss.x, self.boss.y)
 
   if self.moveTimer > self.moveDuration then
     self.moveTimer = 0
 
     if math.random(2) == 2 then
-      self.egg.stateMachine:change("idle", DIRECTIONS[math.random(4)])
+      self.boss.stateMachine:change("idle-1", DIRECTIONS[math.random(4)])
     else
-      self.egg.stateMachine:change("walk", DIRECTIONS[math.random(4)])
+      self.boss.stateMachine:change("walk-1", DIRECTIONS[math.random(4)])
     end
   end
-end
-
-function Boss1WalkState:wallCollisionDetected(collisionList)
-  local hasCollidedBool = false
-  for _, col in pairs(collisionList) do
-    if col.other.isWall then
-      hasCollidedBool = true
-    end
-  end
-  return hasCollidedBool
 end

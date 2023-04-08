@@ -27,7 +27,7 @@ function Boss1IdleState:update(dt)
   self.moveTimer = self.moveTimer + dt
   if self.moveTimer > self.moveDuration then
     self.moveTimer = 0
-    -- self.egg.stateMachine:change("walk", DIRECTIONS[math.random(4)])
+    self.boss.stateMachine:change("walk-1", DIRECTIONS[math.random(4)])
   end
 end
 

@@ -36,8 +36,6 @@ function EggWalkState:enter(direction)
 end
 
 function EggWalkState:update(dt)
-  --  TODO change the walking behavior, make it render, see Notability notes!
-
   if self.direction == "up" then
     self.egg.x, self.egg.y, cols, len = self.world:move(
       self.egg, 
@@ -90,14 +88,4 @@ function EggWalkState:render()
       self.egg.stateMachine:change("walk", DIRECTIONS[math.random(4)])
     end
   end
-end
-
-function EggWalkState:wallCollisionDetected(collisionList)
-  local hasCollidedBool = false
-  for _, col in pairs(collisionList) do
-    if col.other.isWall then
-      hasCollidedBool = true
-    end
-  end
-  return hasCollidedBool
 end
