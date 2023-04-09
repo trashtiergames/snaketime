@@ -62,17 +62,25 @@ function Boss1AttackState:update(dt)
   if self.animation.position == 3 and not self.hitbox then
     self.hitbox = Hitbox(0, 0, 32, 32)
     if self.direction == "up" then
-      self.hitbox.x = self.boss.x
-      self.hitbox.y = self.boss.y - self.boss.height
+      self.hitbox = Hitbox(0, 0, 8, 20)
+      local xOffset = (self.boss.width - self.hitbox.width) / 2
+      self.hitbox.x = self.boss.x + xOffset
+      self.hitbox.y = self.boss.y - self.hitbox.height
     elseif self.direction == "down" then
-      self.hitbox.x = self.boss.x
+      self.hitbox = Hitbox(0, 0, 8, 20)
+      local xOffset = (self.boss.width - self.hitbox.width) / 2
+      self.hitbox.x = self.boss.x + xOffset
       self.hitbox.y = self.boss.y + self.boss.height
     elseif self.direction == "left" then
-      self.hitbox.x = self.boss.x - self.boss.width
-      self.hitbox.y = self.boss.y
+      self.hitbox = Hitbox(0, 0, 20, 8)
+      local yOffset = (self.boss.height - self.hitbox.height) / 2
+      self.hitbox.x = self.boss.x - self.hitbox.width
+      self.hitbox.y = self.boss.y + yOffset
     elseif self.direction == "right" then
+      self.hitbox = Hitbox(0, 0, 20, 8)
+      local yOffset = (self.boss.height - self.hitbox.height) / 2
       self.hitbox.x = self.boss.x + self.boss.width
-      self.hitbox.y = self.boss.y
+      self.hitbox.y = self.boss.y + yOffset
     end
     self.world:add(self.hitbox, self.hitbox.x, self.hitbox.y, 
       self.hitbox.width, self.hitbox.height)
