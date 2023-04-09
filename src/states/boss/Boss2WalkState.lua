@@ -29,7 +29,7 @@ function Boss2WalkState:enter(direction)
   self.animation = self.animations[direction]
   self.animation:gotoFrame(1)
   self.moveTimer = 0
-  self.moveDuration = math.random(5)
+  self.moveDuration = math.random(4)
   self.direction = direction
 end
 
@@ -68,8 +68,8 @@ function Boss2WalkState:update(dt)
     local oldDirection = self.direction
     while self.direction == oldDirection do
       self.direction = DIRECTIONS[math.random(4)]
-      self.animation = self.animations[self.direction]
     end
+    self.animation = self.animations[self.direction]
   end
   
   self.animation:update(dt)
@@ -82,10 +82,10 @@ function Boss2WalkState:render()
   if self.moveTimer > self.moveDuration then
     self.moveTimer = 0
 
-    if math.random(2) == 2 then
-      self.boss.stateMachine:change("idle-2", DIRECTIONS[math.random(4)])
-    else
+    if math.random(3) == 3 then
       self.boss.stateMachine:change("walk-2", DIRECTIONS[math.random(4)])
+    else
+      self.boss.stateMachine:change("idle-2", DIRECTIONS[math.random(4)])
     end
   end
 end

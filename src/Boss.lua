@@ -104,10 +104,11 @@ function Boss:takeDamage(amount)
   if self.invulnerable then
     return
   end
+  sounds["hit"]:play()
   self.hp = self.hp - amount
   self:goInvulnerable(1)
   if self.hp < 1 and self.phase == 1 then
-    self.hp = 3
+    self.hp = 5
     self.stateMachine:change("transform")
   elseif self.hp < 1 and self.phase == 2 then
     self.playState.bossBeaten = true

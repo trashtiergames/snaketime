@@ -14,10 +14,10 @@ function PlayerWalkState:init(player, world)
   }
   local grid = anim8.newGrid(16, 16, self.img.up:getWidth(), self.img.up:getHeight())
   self.animations = {
-    ["up"] = anim8.newAnimation(grid('1-4',1), 0.1),
-    ["down"] = anim8.newAnimation(grid('1-4',1), 0.1),
-    ["left"] = anim8.newAnimation(grid('1-4',1), 0.1),
-    ["right"] = anim8.newAnimation(grid('1-4',1), 0.1)
+    ["up"] = anim8.newAnimation(grid('1-4',1), 0.07),
+    ["down"] = anim8.newAnimation(grid('1-4',1), 0.07),
+    ["left"] = anim8.newAnimation(grid('1-4',1), 0.07),
+    ["right"] = anim8.newAnimation(grid('1-4',1), 0.07)
   }
   self.animation = self.animations[self.direction]
 end
@@ -89,22 +89,27 @@ function PlayerWalkState:update(dt)
     if other.isKey then
       self.player.keys = self.player.keys + 1
       self.world:remove(other)
+      sounds["ding"]:play()
     elseif other.isFeather then
       self.player.feather = true
       self.world:remove(other)
+      sounds["ding"]:play()
     elseif other.isHeartContainer then
       self.player.maxHp = self.player.maxHp + 2
       self.player.hp = self.player.hp + 2
       self.world:remove(other)
+      sounds["blooip"]:play()
     elseif other.isHeart then
       self.player.hp = self.player.hp + 2
       self.world:remove(other)
+      sounds["blooip"]:play()
     elseif other.isEgg then
       self.player:takeDamage(1)
     elseif other.isBoss then
       self.player:takeDamage(1)
     elseif other.isKeyCheckZone then
       if other.type == "key" and playerHasKey then
+        sounds["bchh"]:play()
         self.player.keys = self.player.keys - 1
         local zone = cols[i].otherRect
         local items, len = self.world:queryRect(zone.x, zone.y, zone.w, zone.h)
@@ -122,6 +127,7 @@ function PlayerWalkState:update(dt)
         end
         self.world:remove(other)
       elseif other.type == "feather" and self.player.feather then
+        sounds["bchuich"]:play()
         self.player.feather = false
         local zone = cols[i].otherRect
         local items, len = self.world:queryRect(zone.x, zone.y, zone.w, zone.h)
@@ -140,12 +146,15 @@ function PlayerWalkState:update(dt)
         self.world:remove(other)
       end
     elseif other.isEnterTriggerZone then
+      sounds["bchh"]:play()
       local zonesToClose = {}
       for _, item in pairs(self.world:getItems()) do
         if item.isBoss then
           item.active = true
         elseif item.isDramaticDoorCloseZone then
           table.insert(zonesToClose, item)
+          self.world:remove(item)
+        elseif item.isEnterTriggerZone then
           self.world:remove(item)
         end
       end
@@ -169,7 +178,6 @@ function PlayerWalkState:update(dt)
           end
         end
       end
-      self.world:remove(other)
     end
   end
 end

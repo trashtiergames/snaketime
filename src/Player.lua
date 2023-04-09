@@ -6,7 +6,7 @@ function Player:init(x, y, world)
   self.z = 10
   self.height = 16
   self.width = 16
-  self.speed = 50
+  self.speed = 60
   self.world = world
   self.hp = 6
   self.maxHp = 6
@@ -65,6 +65,7 @@ function Player:takeDamage(amount)
   if self.invulnerable then
     return
   end
+  sounds["hurt"]:play()
   self.hp = self.hp - amount
   self:goInvulnerable(1)
   if self.hp < 1 then

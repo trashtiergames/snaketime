@@ -4,6 +4,15 @@ function TitleState:init()
   self.titleImage = love.graphics.newImage("art/title.png")
 end
 
+function TitleState:enter()
+  titleTheme:setLooping(true)
+  titleTheme:play()
+end
+
+function TitleState:exit()
+  titleTheme:stop()
+end
+
 function TitleState:update()
   if love.keyboard.wasPressed("s") then
     stateStacc:pop()

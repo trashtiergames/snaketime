@@ -14,8 +14,8 @@ function Boss2AttackState:init(boss, world)
 end
 
 function Boss2AttackState:enter()
-  self.xSpeed = math.random(30,60)
-  self.ySpeed = math.random(30,60)
+  self.xSpeed = math.random(40,70)
+  self.ySpeed = math.random(40,70)
   if math.random(2) == 2 then
     self.xSpeed = -self.xSpeed
   end
@@ -23,7 +23,7 @@ function Boss2AttackState:enter()
     self.ySpeed = -self.ySpeed
   end
   self.spinTimer = 0
-  self.spinLimit = math.random(3, 6)
+  self.spinLimit = math.random(4, 8)
   self.animation:gotoFrame(1)
 end
 
@@ -45,6 +45,12 @@ function Boss2AttackState:update(dt)
     self.boss.y + dt * self.ySpeed,
     bossSpinFilter
   )
+
+  if self.animation.position == 3 then
+    sounds["honk"]:stop()
+    sounds["honk"]:play()
+  end
+  
   for i=1, len do
     local col = cols[i]
     local nx = col.normal.x

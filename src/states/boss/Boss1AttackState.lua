@@ -60,6 +60,7 @@ function Boss1AttackState:update(dt)
 
   -- Add hitbox to world on frame 3 (actually this should only trigger once)
   if self.animation.position == 3 and not self.hitbox then
+    sounds["honk"]:play()
     self.hitbox = Hitbox(0, 0, 32, 32)
     if self.direction == "up" then
       self.hitbox = Hitbox(0, 0, 8, 20)

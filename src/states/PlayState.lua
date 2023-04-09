@@ -138,6 +138,7 @@ function PlayState:update(dt)
   end
 
   if #self.eggs == 0 then
+    sounds["bchh"]:play()
     local zonesToOpen = {}
     for _, item in pairs(sortByZ(self.world:getItems())) do
       if item.isDoorOpenZone then
@@ -163,6 +164,8 @@ function PlayState:update(dt)
         end
       end
     end
+    -- Add something to table so this loop doesn't get called again
+    table.insert(self.eggs, 1)
   end
 
   if self.bossBeaten then

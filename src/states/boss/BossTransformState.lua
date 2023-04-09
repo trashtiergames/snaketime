@@ -25,6 +25,13 @@ function BossTransformState:update(dt)
     self.boss.stateMachine:change("idle-2", "down")
   end
   self.animation:update(dt)
+  if self.animation.position == 34 
+    or self.animation.position == 36
+    or self.animation.position == 38 then
+    sounds["honk"]:stop()
+    sounds["honk"]:play()
+  end
+  
 end
 
 function BossTransformState:render()

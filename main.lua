@@ -48,6 +48,17 @@ require "src/states/boss/Boss2AttackState"
 require "src/states/boss/BossWindUpState"
 require "src/states/boss/BossWindDownState"
 
+titleTheme = love.audio.newSource('audio/title.wav', 'static')
+sounds = {
+  ["bchh"] = love.audio.newSource('audio/bchh.wav', 'static'),
+  ["bchuich"] = love.audio.newSource('audio/bchuich.wav', 'static'),
+  ["blooip"] = love.audio.newSource('audio/blooip.wav', 'static'),
+  ["ding"] = love.audio.newSource('audio/ding.wav', 'static'),
+  ["hit"] = love.audio.newSource('audio/hit.wav', 'static'),
+  ["honk"] = love.audio.newSource('audio/honk.mp3', 'static'),
+  ["hurt"] = love.audio.newSource('audio/hurt.wav', 'static')
+}
+
 function love.load()
   math.randomseed(os.time())
 
