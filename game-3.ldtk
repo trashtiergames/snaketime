@@ -985,20 +985,6 @@
 							"defUid": 21,
 							"px": [400,256],
 							"fieldInstances": []
-						},
-						{
-							"__identifier": "feather",
-							"__grid": [12,58],
-							"__pivot": [0,0],
-							"__tags": [],
-							"__tile": null,
-							"__smartColor": "#FEE761",
-							"iid": "1c770560-c640-11ed-a437-9970e896f96d",
-							"width": 16,
-							"height": 16,
-							"defUid": 8,
-							"px": [192,928],
-							"fieldInstances": []
 						}
 					]
 				},
