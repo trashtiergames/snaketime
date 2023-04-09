@@ -6,7 +6,7 @@ function BossTransformState:init(boss, world)
 
   self.img = love.graphics.newImage("art/boss/boss-transform.png")
   local grid = anim8.newGrid(32, 32, self.img:getWidth(), self.img:getHeight())
-  self.animation = anim8.newAnimation(grid('1-41',1), 0.2)
+  self.animation = anim8.newAnimation(grid('1-45',1), 0.2)
   self.animComplete = false
 end
 

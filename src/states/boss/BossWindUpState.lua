@@ -19,10 +19,13 @@ function BossWindUpState:enter()
   self.boss.height = 48
   self.boss.x = self.boss.x - 7
   self.boss.y = self.boss.y - 1
-  self.boss.x, self.boss.y, _, _ = self.world:move(
-    self.boss, self.boss.x, self.boss.y, bossFilter)
+
+  -- Update before moving to prevent yeetage later (that results from handling
+  -- a "bounce" collision with a sprite that's quite far into the wall)
   self.world:update(
     self.boss, self.boss.x, self.boss.y, self.boss.width, self.boss.height)
+  self.boss.x, self.boss.y, _, _ = self.world:move(
+    self.boss, self.boss.x, self.boss.y, bossFilter)
 end
 
 function BossWindUpState:update(dt)

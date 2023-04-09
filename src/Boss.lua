@@ -82,6 +82,7 @@ function Boss:update(dt)
   end
 
   self.stateMachine:update(dt)
+  
 end
 
 function Boss:render()
