@@ -140,17 +140,16 @@ function PlayerWalkState:update(dt)
         self.world:remove(other)
       end
     elseif other.isEnterTriggerZone then
-      print("EnterTriggerZone entered")
-      local zonesToClose = {}
-      for _, item in pairs(sortByZ(self.world:getItems())) do
-        if item.isDramaticDoorCloseZone then
-          table.insert(zonesToClose, item)
+      for _, item in pairs(self.world:getItems()) do
+        if item.isBoss then
+          item.active = true
         end
       end
+      local zonesToClose = {}
+       
       for _, zone in pairs(zonesToClose) do
         local items, _ = self.world:queryRect(zone.x, zone.y, zone.w, zone.h)
         for _, item in pairs(items) do
-          print("closing doors")
           if item.isWall == false then
             item.isWall = true
           end

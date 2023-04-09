@@ -5,6 +5,7 @@ PlayState = Class{__includes = BaseState}
 function PlayState:init()
   -- Remember enemies for later
   self.eggs = {}
+  self.bossBeaten = false
   -- Prep world
   self.world = bump.newWorld(quadSize)
   for _, instance in pairs(level.layerInstances) do
@@ -107,7 +108,7 @@ function PlayState:init()
           self.world:add(egg, x, y, width, height)
           table.insert(self.eggs, egg)
         elseif entity["__identifier"] == "boss" then
-          boss = Boss(x, y, self.world)
+          boss = Boss(x, y, self.world, self)
           self.world:add(boss, x, y, width, height)
         end
       
@@ -164,21 +165,14 @@ function PlayState:update(dt)
     end
   end
 
-  -- Game over placeholder
-  if love.keyboard.wasPressed("y") then
-    stateStacc:pop()
-    stateStacc:push(PlayState())
-    stateStacc:push(GameOverState())
+  if self.bossBeaten then
+    self.world:remove(self.player)
+    stateStacc:push(WinState(self.player, self.camera))
   end
 
   if love.keyboard.wasPressed("r") then
     stateStacc:pop()
     stateStacc:push(PlayState())
-  end
-
-  if love.keyboard.wasPressed("b") then
-    boss.stateMachine:change("wind-up")
-    boss.phase = 2
   end
 
   self.camera:update()

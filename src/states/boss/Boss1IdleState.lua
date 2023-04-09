@@ -24,10 +24,12 @@ function Boss1IdleState:enter(direction)
 end
 
 function Boss1IdleState:update(dt)
-  self.moveTimer = self.moveTimer + dt
-  if self.moveTimer > self.moveDuration then
-    self.moveTimer = 0
-    self.boss.stateMachine:change("walk-1", DIRECTIONS[math.random(4)])
+  if self.boss.active then
+    self.moveTimer = self.moveTimer + dt
+    if self.moveTimer > self.moveDuration then
+      self.moveTimer = 0
+      self.boss.stateMachine:change("walk-1", DIRECTIONS[math.random(4)])
+    end
   end
 end
 

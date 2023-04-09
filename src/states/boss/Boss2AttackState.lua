@@ -23,6 +23,7 @@ function Boss2AttackState:enter()
     self.ySpeed = -self.ySpeed
   end
   self.spinTimer = 0
+  self.spinLimit = math.random(3, 6)
   self.animation:gotoFrame(1)
 end
 

@@ -11,7 +11,7 @@ function Egg:init(x, y, world, eggList)
   self.attackWaitAmount = 3
   self.world = world
   self.isEgg = true
-  self.hp = 1
+  self.hp = 2
   self.eggs = eggList
 
   -- Variables for being invulnerable after a hit (taken from CS50G code by

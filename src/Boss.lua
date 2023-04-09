@@ -1,6 +1,6 @@
 Boss = Class{}
 
-function Boss:init(x, y, world)
+function Boss:init(x, y, world, playState)
   self.x = x
   self.y = y
   self.z = 9
@@ -10,10 +10,12 @@ function Boss:init(x, y, world)
   self.attackTimer = 0
   self.attackWaitAmount = 3
   self.world = world
+  self.playState = playState
   self.isBoss = true
   self.isScanning = true
   self.phase = 1
-  self.hp = 3
+  self.hp = 5
+  self.active = false
 
   -- Variables for being invulnerable after a hit (taken from CS50G code by
   -- Colton Ogden, cogden@cs50.harvard.edu)
@@ -107,7 +109,7 @@ function Boss:takeDamage(amount)
     self.hp = 3
     self.stateMachine:change("transform")
   elseif self.hp < 1 and self.phase == 2 then
+    self.playState.bossBeaten = true
     self.world:remove(self)
-    stateStacc:push(WinState())
   end
 end
