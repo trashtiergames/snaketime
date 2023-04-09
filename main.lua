@@ -78,7 +78,9 @@ function love.load()
   )
 
   -- Load LDtk level data
-  local ldtkFile = io.open("game-3.ldtk", "r")
+  -- Keep this path so it works when loaded as a folder
+  -- Maybe there's a doable fix for this out there
+  local ldtkFile = io.open("snaketime/game-3.ldtk", "r")
   local ldtkJson = ldtkFile:read("a")
   ldtkFile:close()
   ldtk = json.decode(ldtkJson)
