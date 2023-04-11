@@ -98,7 +98,7 @@ And then it iterates over the list of tiles of the level, which look like this i
 
 <img alt="LDtk screenshot showing tiles layer" src="/readme-images/ldtk-tiles.png?raw=true">
 
-And like this in code:
+And like this in json file again, where only tiles are listed that are "part of the dungeon" (i.e. there's no "empty tile" for position 0,0):
 
 ```
 "levels": [{
@@ -205,7 +205,7 @@ Using this system, doors are rendered over tiles (such as walls). Then, the play
 ## Art, animation and audio
 <img alt="Doodle collage" src="/readme-images/doodle-collage.png?raw=true">
 
-I attempted to create my own art and aniomations for this game. To import and manage the animations, I used anim8 [link]. Each animation was exported as a row of images and then assigned to different states using the library. The WinState shows a simple example of a single animation:
+I attempted to create my own art and aniomations for this game. To import and manage the animations, I used [anim8](https://github.com/kikito/anim8). Each animation was exported as a row of images and then assigned to different states using the library. The WinState shows a simple example of a single animation:
 
 ```
 function WinState:init(player, camera)
@@ -297,7 +297,7 @@ A considerable amount of work went into building the choreography of the final b
 
 After it loses 5 HP, the boss will enter a transformation animation during which it is invulnerable, not collidable, and does not scan for enemies. Narratively, the boss grows additional heads, like a hydra of Herculean myth. Once the animation is done, it regains 5 HP and enters phase 2 idle state, which cycles with the phase 2 walk state. Programmatically, the two are similar to the corresponding phase 1 states, except that the boss is not scanning for the player to launch attacks.
 
-Instead, the boss has a new and more dangerous attack. When it ends an idle phase, it has a chance to enter a wind-up state, getting ready for an attack and playing a wind-up animation. Once the wind-up ends, it launches a vast attack that moevs across the screen fast and bounces off of walls using bump’s “bounce” filter. This caused some bugs at first, and I had to make sure to move the boss away from walls before it launches its attack. Without this, the boss would be thrown off the screen because it caused “bounce” collisions with high velocities, as a result of the sprite changing size and it getting positioned far into a wall.
+Instead, the boss has a new and more dangerous attack. When it ends an idle phase, it has a chance to enter a wind-up state, getting ready for an attack and playing a wind-up animation. Once the wind-up ends, it launches a vast attack that moves across the screen fast and bounces off of walls using bump’s “bounce” filter. This caused some bugs at first, and I had to make sure to move the boss away from walls before it launches its attack. Without this, the boss would be thrown off the screen because it caused “bounce” collisions with high velocities, as a result of the sprite changing size and it getting positioned far into a wall.
 
 After the boss completes its attack phase, it enters a wind-down state with a corresponding animation. Then it transitions back into an idle state smoothly. Here is a page from my notes about the state system:
 
