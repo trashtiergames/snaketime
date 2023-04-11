@@ -1,3 +1,5 @@
+-- Manages the final boss of the game
+
 Boss = Class{}
 
 function Boss:init(x, y, world, playState)
@@ -7,14 +9,15 @@ function Boss:init(x, y, world, playState)
   self.height = 32
   self.width = 32
   self.speed = 50
+  self.phase = 1
+  self.hp = 5
+
   self.attackTimer = 0
   self.attackWaitAmount = 3
   self.world = world
   self.playState = playState
   self.isBoss = true
   self.isScanning = true
-  self.phase = 1
-  self.hp = 5
   self.active = false
 
   -- Variables for being invulnerable after a hit (taken from CS50G code by
@@ -82,10 +85,10 @@ function Boss:update(dt)
   end
 
   self.stateMachine:update(dt)
-  
 end
 
 function Boss:render()
+  -- If sprite is supposed to flash, toggle alpha from time to time
   if self.flashTimer > 0.06 then
     self.flashTimer = 0
     love.graphics.setColor(1, 1, 1, 64/255)
@@ -104,8 +107,8 @@ function Boss:takeDamage(amount)
   if self.invulnerable then
     return
   end
-  sounds["hit"]:play()
   self.hp = self.hp - amount
+  sounds["hit"]:play()
   self:goInvulnerable(1)
   if self.hp < 1 and self.phase == 1 then
     self.hp = 5

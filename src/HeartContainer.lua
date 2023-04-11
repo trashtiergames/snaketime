@@ -1,4 +1,4 @@
--- Saves infos about tiles of the level
+-- Manages heart containers, which increase the player's max HP
 
 HeartContainer = Class{}
 

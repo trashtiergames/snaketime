@@ -1,3 +1,5 @@
+-- Manages player walk behavior, which is active most of the game
+
 PlayerWalkState = Class{__includes = BaseState}
 
 function PlayerWalkState:init(player, world)
@@ -5,7 +7,7 @@ function PlayerWalkState:init(player, world)
   self.world = world
   self.direction = "down"
   -- Animations are solved in a slightly odd way because I saved each direction
-  -- as an individual file.
+  -- as an individual file
   self.img = {
     ["up"] = love.graphics.newImage("art/player-walk-up.png"),
     ["down"] = love.graphics.newImage("art/player-walk-down.png"),
@@ -14,10 +16,10 @@ function PlayerWalkState:init(player, world)
   }
   local grid = anim8.newGrid(16, 16, self.img.up:getWidth(), self.img.up:getHeight())
   self.animations = {
-    ["up"] = anim8.newAnimation(grid('1-4',1), 0.07),
-    ["down"] = anim8.newAnimation(grid('1-4',1), 0.07),
-    ["left"] = anim8.newAnimation(grid('1-4',1), 0.07),
-    ["right"] = anim8.newAnimation(grid('1-4',1), 0.07)
+    ["up"] = anim8.newAnimation(grid("1-4",1), 0.07),
+    ["down"] = anim8.newAnimation(grid("1-4",1), 0.07),
+    ["left"] = anim8.newAnimation(grid("1-4",1), 0.07),
+    ["right"] = anim8.newAnimation(grid("1-4",1), 0.07)
   }
   self.animation = self.animations[self.direction]
 end
@@ -30,7 +32,11 @@ end
 
 function PlayerWalkState:update(dt)
   local cols, len = {}, 0
+  -- We might have stopped if no key was pressed before
   self.animation:resume()
+
+  -- "Move" the player if button was pressed. The player filter makes it so 
+  -- that the player will bump into walls and go over certain other items
   if love.keyboard.isDown("w") then
     self.player.x, self.player.y, cols, len = self.world:move(
       self.player, 
@@ -86,27 +92,35 @@ function PlayerWalkState:update(dt)
   for i=1, len do
     local other = cols[i].other
     
+    -- Pick up items if colliding with them
     if other.isKey then
       self.player.keys = self.player.keys + 1
       self.world:remove(other)
       sounds["ding"]:play()
+
     elseif other.isFeather then
       self.player.feather = true
       self.world:remove(other)
       sounds["ding"]:play()
+
     elseif other.isHeartContainer then
       self.player.maxHp = self.player.maxHp + 2
       self.player.hp = self.player.hp + 2
       self.world:remove(other)
       sounds["blooip"]:play()
+
     elseif other.isHeart then
       self.player.hp = self.player.hp + 2
       self.world:remove(other)
       sounds["blooip"]:play()
+
     elseif other.isEgg then
       self.player:takeDamage(1)
+
     elseif other.isBoss then
       self.player:takeDamage(1)
+
+    -- On key check zones, check for keys, open doors
     elseif other.isKeyCheckZone then
       if other.type == "key" and playerHasKey then
         sounds["bchh"]:play()
@@ -145,6 +159,8 @@ function PlayerWalkState:update(dt)
         end
         self.world:remove(other)
       end
+
+    -- On entering boss room, close its doors, activate boss
     elseif other.isEnterTriggerZone then
       sounds["bchh"]:play()
       local zonesToClose = {}

@@ -1,3 +1,5 @@
+-- Holds data about player and boss hitboxes, and allows debug drawing
+
 Hitbox = Class{}
 
 function Hitbox:init(x, y, width, height)

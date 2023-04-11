@@ -1,3 +1,5 @@
+-- Manage the egg enemies in the game
+
 Egg = Class{}
 
 function Egg:init(x, y, world, eggList)
@@ -7,12 +9,13 @@ function Egg:init(x, y, world, eggList)
   self.height = 16
   self.width = 16
   self.speed = 50
+  self.hp = 2
+
   self.attackTimer = 0
   self.attackWaitAmount = 3
   self.world = world
-  self.isEgg = true
-  self.hp = 2
   self.eggs = eggList
+  self.isEgg = true
 
   -- Variables for being invulnerable after a hit (taken from CS50G code by
   -- Colton Ogden, cogden@cs50.harvard.edu)
@@ -92,8 +95,8 @@ function Egg:takeDamage(amount)
   if self.invulnerable then
     return
   end
-  sounds["hit"]:play()
   self.hp = self.hp - amount
+  sounds["hit"]:play()
   self:goInvulnerable(1)
   if self.hp < 1 then
     self.world:remove(self)

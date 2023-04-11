@@ -1,70 +1,14 @@
-Class = require "libraries/class"
-push = require "libraries/push"
-json = require "libraries/json"
-bump = require "libraries/bump"
-anim8 = require "libraries/anim8"
-require "src/helpers"
-require "src/Tile"
-require "src/Key"
-require "src/Feather"
-require "src/Heart"
-require "src/HeartContainer"
-require "src/Player"
-require "src/Egg"
-require "src/Boss"
-require "src/Camera"
-require "src/UI"
-require "src/filters"
-require "src/Hitbox"
+-- This main script for the game snaketime loads all the assets as well as 
+-- the level, and 
 
-require "src/KeyCheckZone"
-require "src/DoorOpenZone"
-require "src/DramaticDoorCloseZone"
-require "src/EnterTriggerZone"
-
-require "src/states/StateStack"
-require "src/states/StateMachine"
-require "src/states/BaseState"
-
-require "src/states/PlayState"
-require "src/states/TitleState"
-require "src/states/GameOverState"
-require "src/states/WinState"
-
-require "src/states/player/PlayerWalkState"
-require "src/states/player/PlayerAttackState"
-
-require "src/states/egg/EggIdleState"
-require "src/states/egg/EggWalkState"
-require "src/states/egg/EggRollState"
-
-require "src/states/boss/Boss1IdleState"
-require "src/states/boss/Boss1WalkState"
-require "src/states/boss/Boss1AttackState"
-require "src/states/boss/BossTransformState"
-require "src/states/boss/Boss2IdleState"
-require "src/states/boss/Boss2WalkState"
-require "src/states/boss/Boss2AttackState"
-require "src/states/boss/BossWindUpState"
-require "src/states/boss/BossWindDownState"
-
-titleTheme = love.audio.newSource('audio/title.wav', 'static')
-sounds = {
-  ["bchh"] = love.audio.newSource('audio/bchh.wav', 'static'),
-  ["bchuich"] = love.audio.newSource('audio/bchuich.wav', 'static'),
-  ["blooip"] = love.audio.newSource('audio/blooip.wav', 'static'),
-  ["ding"] = love.audio.newSource('audio/ding.wav', 'static'),
-  ["hit"] = love.audio.newSource('audio/hit.wav', 'static'),
-  ["honk"] = love.audio.newSource('audio/honk.mp3', 'static'),
-  ["hurt"] = love.audio.newSource('audio/hurt.wav', 'static')
-}
+require "src/dependencies"
 
 function love.load()
   math.randomseed(os.time())
 
   -- Prepare window
-  love.window.setTitle('Game 3')
-  love.graphics.setDefaultFilter('nearest', 'nearest')
+  love.window.setTitle("Snaketime")
+  love.graphics.setDefaultFilter("nearest", "nearest")
   VIRTUAL_WIDTH = 256
   VIRTUAL_HEIGHT = 160
   windowWidth, windowHeight = love.window.getDesktopDimensions()
@@ -78,15 +22,6 @@ function love.load()
   )
 
   -- Load LDtk level data
-  -- Keep this path so it works when loaded as a folder
-  -- Maybe there's a doable fix for this out there
-  -- This should only work for MacOS
-  -- This worked, but not when dragging the game folder onto the love app.
-  -- local current_dir = os.getenv("PWD")
-  -- local current_dir = io.popen("cd"):read()
-  -- print("Current dir:", current_dir)
-  -- local ldtkPath = current_dir .. "/snaketime/game-3.ldtk"
-  -- print("ldtkPath:", ldtkPath)
   local ldtkFile = io.open("snaketime/game-3.ldtk", "r")
   local ldtkJson = ldtkFile:read("a")
   ldtkFile:close()
@@ -105,9 +40,20 @@ function love.load()
   quads = generateQuads(tileset, quadSize, quadSize)
 
   -- Load font
-  silkscreen = love.graphics.newFont('fonts/Silkscreen-Regular.ttf', 8)
-  basic = love.graphics.newFont('fonts/font.ttf', 8)
+  basic = love.graphics.newFont("fonts/font.ttf", 8)
   love.graphics.setFont(basic)
+
+  -- Load audio
+  titleTheme = love.audio.newSource("audio/title.wav", "static")
+  sounds = {
+    ["bchh"] = love.audio.newSource("audio/bchh.wav", "static"),
+    ["bchuich"] = love.audio.newSource("audio/bchuich.wav", "static"),
+    ["blooip"] = love.audio.newSource("audio/blooip.wav", "static"),
+    ["ding"] = love.audio.newSource("audio/ding.wav", "static"),
+    ["hit"] = love.audio.newSource("audio/hit.wav", "static"),
+    ["honk"] = love.audio.newSource("audio/honk.mp3", "static"),
+    ["hurt"] = love.audio.newSource("audio/hurt.wav", "static")
+  }
 
   stateStacc = StateStack()
   stateStacc:push(PlayState())
@@ -119,7 +65,7 @@ function love.load()
 end
 
 function love.keypressed(key)
-  if key == 'escape' then
+  if key == "escape" then
       love.event.quit()
   end
 
@@ -127,6 +73,7 @@ function love.keypressed(key)
 end
 
 function love.keyboard.wasPressed(key)
+  -- This allows us to check in update() if a key was pressed last frame
   return love.keyboard.keysPressed[key]
 end
 

@@ -1,3 +1,5 @@
+-- After phase 1 ends, play transformation animation and activate phase 2
+
 BossTransformState = Class{__includes = BaseState}
 
 function BossTransformState:init(boss, world)
@@ -10,7 +12,8 @@ function BossTransformState:init(boss, world)
   self.animComplete = false
 end
 
-function BossTransformState:enter(diection)
+function BossTransformState:enter()
+  -- Make boss invulnerable during this animation
   self.animation:gotoFrame(1)
   self.animComplete = false
   self.boss.isBoss = false
@@ -18,6 +21,7 @@ function BossTransformState:enter(diection)
 end
 
 function BossTransformState:update(dt)
+  -- Transition to phase 2 when complete
   if self.animation.position == 1 and self.animComplete then
     self.boss.phase = 2
     self.boss.isBoss = true
@@ -25,6 +29,7 @@ function BossTransformState:update(dt)
     self.boss.stateMachine:change("idle-2", "down")
   end
   self.animation:update(dt)
+  -- Honk on frames with open beak
   if self.animation.position == 35 
     or self.animation.position == 37
     or self.animation.position == 39 then

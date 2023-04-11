@@ -1,4 +1,4 @@
--- Saves infos about tiles of the level
+-- Manages keys that are used to open locked doors
 
 Key = Class{}
 

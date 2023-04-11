@@ -1,3 +1,5 @@
+-- Manage boss phase 2 idle state
+
 Boss2IdleState = Class{__includes = BaseState}
 
 function Boss2IdleState:init(boss, world)
@@ -24,6 +26,7 @@ function Boss2IdleState:enter(direction)
 end
 
 function Boss2IdleState:update(dt)
+  -- After a while, change to either walk, or start attack wind up
   self.moveTimer = self.moveTimer + dt
   if self.moveTimer > self.moveDuration then
     local timerUp = self.boss.attackTimer > self.boss.attackWaitAmount

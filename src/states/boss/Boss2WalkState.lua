@@ -1,3 +1,5 @@
+-- Manage boss phase 2 walk state
+
 Boss2WalkState = Class{__includes = BaseState}
 
 function Boss2WalkState:init(boss, world)
@@ -34,6 +36,7 @@ function Boss2WalkState:enter(direction)
 end
 
 function Boss2WalkState:update(dt)
+  -- Move in directiuon set on enter()
   if self.direction == "up" then
     self.boss.x, self.boss.y, cols, len = self.world:move(
       self.boss, 
@@ -64,6 +67,7 @@ function Boss2WalkState:update(dt)
     )
   end
 
+  -- When bumping into a wall, change direction
   for _, col in pairs(cols) do
     local oldDirection = self.direction
     while self.direction == oldDirection do
@@ -79,6 +83,7 @@ end
 function Boss2WalkState:render()
   self.animation:draw(self.img[self.direction], self.boss.x, self.boss.y)
 
+  -- Change to a different direction, or idle, after a while
   if self.moveTimer > self.moveDuration then
     self.moveTimer = 0
 

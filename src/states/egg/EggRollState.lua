@@ -1,3 +1,5 @@
+-- Manage (rolling) attacks against the player
+
 EggRollState = Class{__includes = BaseState}
 
 function EggRollState:init(egg, world)
@@ -38,14 +40,15 @@ function EggRollState:enter(direction)
 end
 
 function EggRollState:update(dt)
-  -- Change state if egg is about to restart roll anim
   self.animation:update(dt)
   
+  -- Change state if egg is about to restart roll anim
   if self.animation.position == 1 and self.animComplete then
     self.egg.attackTimer = 0
     self.egg.stateMachine:change("idle", DIRECTIONS[math.random(4)])
   end
 
+  -- Move at high speed in direction set on enter()
   if self.animation.position > 5 then
     if self.direction == "up" then
       self.egg.x, self.egg.y, cols, len = self.world:move(

@@ -1,3 +1,5 @@
+-- Freeze the state below, render text over it and play dance animation
+
 WinState = Class{__includes = BaseState}
 
 function WinState:init(player, camera)
@@ -6,7 +8,7 @@ function WinState:init(player, camera)
   
   self.img = love.graphics.newImage("art/player-walk-right.png")
   local grid = anim8.newGrid(16, 16, self.img:getWidth(), self.img:getHeight())
-  self.animation = anim8.newAnimation(grid('1-4',1), 0.1)
+  self.animation = anim8.newAnimation(grid("1-4",1), 0.1)
 end
 
 function WinState:update(dt)

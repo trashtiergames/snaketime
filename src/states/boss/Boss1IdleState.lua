@@ -1,3 +1,5 @@
+-- Manage boss idle state
+
 Boss1IdleState = Class{__includes = BaseState}
 
 function Boss1IdleState:init(boss, world)
@@ -14,6 +16,7 @@ function Boss1IdleState:init(boss, world)
 end
 
 function Boss1IdleState:enter(direction)
+  -- Stay idle for a random amount of seconds
   self.moveTimer = 0
   self.moveDuration = math.random(5)
   if direction then

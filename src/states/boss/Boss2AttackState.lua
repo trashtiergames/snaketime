@@ -1,3 +1,5 @@
+-- Manage phase 2 spinning attack, bouncing off walls
+
 Boss2AttackState = Class{__includes = BaseState}
 
 function Boss2AttackState:init(boss, world)
@@ -14,6 +16,7 @@ function Boss2AttackState:init(boss, world)
 end
 
 function Boss2AttackState:enter()
+  -- Set a random-ish direction and speed
   self.xSpeed = math.random(40,70)
   self.ySpeed = math.random(40,70)
   if math.random(2) == 2 then
@@ -25,10 +28,6 @@ function Boss2AttackState:enter()
   self.spinTimer = 0
   self.spinLimit = math.random(4, 8)
   self.animation:gotoFrame(1)
-end
-
-function Boss2AttackState:exit()
-  
 end
 
 function Boss2AttackState:update(dt)
@@ -46,6 +45,7 @@ function Boss2AttackState:update(dt)
     bossSpinFilter
   )
 
+  -- Honk continuously
   if self.animation.position == 3 then
     sounds["honk"]:stop()
     sounds["honk"]:play()
@@ -65,20 +65,6 @@ function Boss2AttackState:update(dt)
       self.ySpeed = -self.ySpeed
     end
   end
-
-  -- if self.xSpeed > 0 and self.xSpeed < 50 then
-  --   self.xSpeed = self.xSpeed + self.xSpeed * dt
-  -- elseif self.xSpeed < 0 and self.xSpeed > -50 then
-  --   self.xSpeed = self.xSpeed - self.xAccel * dt
-  -- end
-
-  -- if self.ySpeed > 0 and self.ySpeed < 50 then
-  --   self.ySpeed = self.ySpeed + self.ySpeed * dt
-  -- elseif self.ySpeed < 0 and self.ySpeed > -50 then
-  --   self.ySpeed = self.ySpeed - self.yAccel * dt
-  -- end
-  -- print("xSpeed:", self.xSpeed)
-  -- print("ySpeed:", self.ySpeed)
 end
 
 function Boss2AttackState:render()

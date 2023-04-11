@@ -1,3 +1,5 @@
+-- Play attack animation once, and cause damage using a hitbox
+
 Boss1AttackState = Class{__includes = BaseState}
 
 function Boss1AttackState:init(boss, world, direction)
@@ -88,7 +90,7 @@ function Boss1AttackState:update(dt)
   end
   
   if self.hitbox then
-    -- This "moves" the hitbox to where it already is to detect collisions
+    -- "Move" the hitbox to where it already is to detect collisions
     _, _, cols, len = self.world:move(
       self.hitbox, self.hitbox.x, self.hitbox.y, boss1HitboxFilter)
 

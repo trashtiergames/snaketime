@@ -1,5 +1,5 @@
 --[[
-    Author: Colton Ogden
+    Original author: Colton Ogden
     cogden@cs50.harvard.edu
     License: Attribution-NonCommercial-ShareAlike 4.0 International 
     https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode

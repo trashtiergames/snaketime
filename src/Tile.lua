@@ -20,7 +20,3 @@ function Tile:update() end
 function Tile:render()
   love.graphics.draw(tileset, quads[self.quadId], self.x, self.y)
 end
-
-function Tile:openDoor()
-
-end

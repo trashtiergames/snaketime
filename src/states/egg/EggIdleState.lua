@@ -1,3 +1,5 @@
+-- Manage idle state, switching back and forth between walking and attacking
+
 EggIdleState = Class{__includes = BaseState}
 
 function EggIdleState:init(egg, world)
@@ -16,6 +18,7 @@ function EggIdleState:init(egg, world)
 end
 
 function EggIdleState:enter(direction)
+  -- Stand idly for a random amount of seconds
   self.moveTimer = 0
   self.moveDuration = math.random(5)
   if direction then
@@ -26,6 +29,7 @@ function EggIdleState:enter(direction)
 end
 
 function EggIdleState:update(dt)
+  -- If timne is up, walk again
   self.moveTimer = self.moveTimer + dt
   if self.moveTimer > self.moveDuration then
     self.moveTimer = 0

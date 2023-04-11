@@ -1,10 +1,15 @@
+-- Smaller functions that are used throughout the main code
+
 function sortByZ(itemsTable)
+  -- Send items from bump.world with a higher z-index to the back
+  -- This helps draw items in the right order, and enables us to know in which
+  -- order items will be updated, so we don't call update() on removed items
   table.sort(itemsTable, function(a,b) return a.z < b.z end)
   return itemsTable
 end
 
--- Recursive table printing function (link to source was broken)
 function pprint(t)
+  -- Recursive table printing function (link to source was broken)
   local print_r_cache={}
   local function sub_print_r(t,indent)
     if (print_r_cache[tostring(t)]) then
@@ -38,13 +43,13 @@ function pprint(t)
   print()
 end
 
---[[
-    Author: Colton Ogden
-    cogden@cs50.harvard.edu
-    License: Attribution-NonCommercial-ShareAlike 4.0 International 
-    https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
-]]
 function generateQuads(atlas, tilewidth, tileheight)
+  --[[
+      Author: Colton Ogden
+      cogden@cs50.harvard.edu
+      License: Attribution-NonCommercial-ShareAlike 4.0 International 
+      https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+  ]]
   -- How many tiles wide and high is the atlas
   local sheetWidth = atlas:getWidth() / tilewidth
   local sheetHeight = atlas:getHeight() / tileheight
@@ -65,9 +70,9 @@ function generateQuads(atlas, tilewidth, tileheight)
   return spritesheet
 end
 
--- Converts LDtk hex color to löve2d format
--- By HamdyElzonqali on Github under the MIT license
 function hex2rgb(color)
+  -- Converts LDtk hex color to löve2d format
+  -- By HamdyElzonqali on Github under the MIT license
   local r = load("return {0x" .. color:sub(2, 3) .. ",0x" .. color:sub(4, 5) .. 
               ",0x" .. color:sub(6, 7) .. "}")()
   return r[1] / 255, r[2] / 255, r[3] / 255

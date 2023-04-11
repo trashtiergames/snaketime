@@ -1,3 +1,5 @@
+-- Manage boss walk state in phase 1
+
 Boss1WalkState = Class{__includes = BaseState}
 
 function Boss1WalkState:init(boss, world)
@@ -33,6 +35,7 @@ function Boss1WalkState:enter(direction)
   self.direction = direction
 end
 
+-- Attempt to move into set diretion, colliding with walls
 function Boss1WalkState:update(dt)
   if self.direction == "up" then
     self.boss.x, self.boss.y, cols, len = self.world:move(
@@ -77,6 +80,7 @@ end
 function Boss1WalkState:render()
   self.animation:draw(self.img[self.direction], self.boss.x, self.boss.y)
 
+  -- Change direction, or to idle, after a while
   if self.moveTimer > self.moveDuration then
     self.moveTimer = 0
 

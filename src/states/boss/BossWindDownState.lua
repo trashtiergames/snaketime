@@ -1,3 +1,5 @@
+-- Play wind down animation after phase 2 spin attack and go to idle state
+
 BossWindDownState = Class{__includes = BaseState}
 
 function BossWindDownState:init(boss, world)

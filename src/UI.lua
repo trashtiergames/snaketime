@@ -1,4 +1,4 @@
--- Draw amount of keys to screen without being affected by the camera
+-- Draws icons to screen without being affected by the camera
 
 UI = Class{}
 

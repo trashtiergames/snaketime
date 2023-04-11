@@ -1,3 +1,5 @@
+-- Play through attack animation once, detect hits with a temporary hitbox
+
 PlayerAttackState = Class{__includes = BaseState}
 
 function PlayerAttackState:init(player, world, direction)
@@ -71,7 +73,7 @@ function PlayerAttackState:update(dt)
   end
   
   if self.hitbox then
-    -- This "moves" the hitbox to where it already is to detect collisions
+    -- "Move" the hitbox to where it already is to detect collisions
     _, _, cols, len = self.world:move(
       self.hitbox, self.hitbox.x, self.hitbox.y, hitboxFilter)
 
@@ -99,7 +101,7 @@ function PlayerAttackState:update(dt)
     end
   end
 
-  -- Check if an egg collides with player during player's attack animation
+  -- Check if an enemy collides with player during player's attack animation
   _, _, cols, len = self.world:move(
     self.player, self.player.x, self.player.y, playerFilter)
 
@@ -129,7 +131,7 @@ function PlayerAttackState:render()
     ["left"] = 0,
     ["right"] = 0
   }
-  -- Add offset depending on direction
+  -- Add offset depending on direction (frames are bigger than usual)
   local x = self.player.x + xOffset[self.direction]
   local y = self.player.y + yOffset[self.direction]
   self.animation:draw(self.img[self.direction], x, y)

@@ -1,3 +1,5 @@
+-- Manages info and states of the player character
+
 Player = Class{}
 
 function Player:init(x, y, world)
@@ -7,13 +9,14 @@ function Player:init(x, y, world)
   self.height = 16
   self.width = 16
   self.speed = 60
-  self.world = world
   self.hp = 6
   self.maxHp = 6
-  self.isPlayer = true
 
   self.keys = 0
   self.feather = false
+  
+  self.world = world
+  self.isPlayer = true
 
   -- Variables for being invulnerable after a hit (taken from CS50G code by
   -- Colton Ogden, cogden@cs50.harvard.edu)
@@ -65,8 +68,8 @@ function Player:takeDamage(amount)
   if self.invulnerable then
     return
   end
-  sounds["hurt"]:play()
   self.hp = self.hp - amount
+  sounds["hurt"]:play()
   self:goInvulnerable(1)
   if self.hp < 1 then
     stateStacc:pop()

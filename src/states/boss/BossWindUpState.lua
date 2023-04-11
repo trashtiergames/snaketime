@@ -1,3 +1,5 @@
+-- Play wind up animation and transition to spin attack state
+
 BossWindUpState = Class{__includes = BaseState}
 
 function BossWindUpState:init(boss, world)

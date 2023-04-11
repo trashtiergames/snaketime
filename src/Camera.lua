@@ -1,4 +1,4 @@
--- Saves infos about tiles of the level
+-- Translates graphics so that player is always in the middle of the screen
 
 Camera = Class{}
 

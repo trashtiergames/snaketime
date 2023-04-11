@@ -1,3 +1,5 @@
+-- Display game over image and text, listen for retry
+
 GameOverState = Class{__includes = BaseState}
 
 function GameOverState:init()

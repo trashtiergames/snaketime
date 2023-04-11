@@ -1,3 +1,5 @@
+-- Manage egg walking state, switching back and forth with idle and attack
+
 EggWalkState = Class{__includes = BaseState}
 
 function EggWalkState:init(egg, world)
@@ -28,6 +30,7 @@ function EggWalkState:init(egg, world)
 end
 
 function EggWalkState:enter(direction)
+  -- Walk in a random direction, for a random amount of seconds
   self.animation = self.animations[direction]
   self.animation:gotoFrame(1)
   self.moveTimer = 0
@@ -36,6 +39,7 @@ function EggWalkState:enter(direction)
 end
 
 function EggWalkState:update(dt)
+  -- Simply keep moving in the direction set on enter()
   if self.direction == "up" then
     self.egg.x, self.egg.y, cols, len = self.world:move(
       self.egg, 
@@ -66,9 +70,9 @@ function EggWalkState:update(dt)
     )
   end
 
+  -- Change directions if walking against wall
   for _, col in pairs(cols) do
     if col.other.isWall then
-      -- self.egg.stateMachine:change("walk", DIRECTIONS[math.random(4)])
       local oldDirection = self.direction
       while self.direction == oldDirection do
         self.direction = DIRECTIONS[math.random(4)]
@@ -84,6 +88,7 @@ end
 function EggWalkState:render()
   self.animation:draw(self.img[self.direction], self.egg.x, self.egg.y)
 
+  -- Switch direction, or to idle, after a while
   if self.moveTimer > self.moveDuration then
     self.moveTimer = 0
 

@@ -1,4 +1,4 @@
--- Main game logic
+-- Manage main game logic, passing update and render calls to items in world
 
 PlayState = Class{__includes = BaseState}
 
@@ -6,8 +6,11 @@ function PlayState:init()
   -- Remember enemies for later
   self.eggs = {}
   self.bossBeaten = false
-  -- Prep world
+
+  -- Prep world (quad size was loaded in main.lua)
   self.world = bump.newWorld(quadSize)
+
+  -- Load collision grid
   for _, instance in pairs(level.layerInstances) do
     if instance["__identifier"] == "collisions" then
       -- Setting these to local makes them TOO local
@@ -26,6 +29,7 @@ function PlayState:init()
         local cx, cy = x / quadSize, y / quadSize
         local collisionIndex = (cx + (cy * collisionGridWidth)) + 1
         local isWall = false
+        -- If the tile is in collision grid, set it to be a wall
         if collisions[collisionIndex] == 1 then
           isWall = true
         else
@@ -45,10 +49,11 @@ function PlayState:init()
         local quadId = line.t
         local x, y = line.px[1], line.px[2]
         local cx, cy = x / quadSize, y / quadSize
-        -- Remember to set all collided tiles' isWall to false on collision
+        -- Some doors start out closed
         local isWall = true
         local isDoor = true
         
+        -- Some doors start out open
         for _, id in pairs(openDoorIds) do
           if quadId == id then
             isWall = false
@@ -61,13 +66,15 @@ function PlayState:init()
       end
     end
 
-    -- Prep door tops
+    -- Prep door tops (rendered over player to create the illusion that the
+    -- player is walking through a door)
     if instance["__identifier"] == "door_tops" then
       for i, line in pairs(instance.gridTiles) do
         local quadId = line.t
         local x, y = line.px[1], line.px[2]
         local cx, cy = x / quadSize, y / quadSize
         local tile = Tile(x, y, quadId)
+        -- Set z over player.z (10), so it will render after player
         tile.z = 11
         self.world:add(tile, x, y, quadSize, quadSize)
       end
@@ -81,37 +88,50 @@ function PlayState:init()
         local x, y = entity.px[1], entity.px[2]
         local width = entity["width"]
         local height = entity["height"]
+
+        -- Most entities simply get an object that is added to bump.world
+        -- They will be accessed later through bump collision or queries
         if entity["__identifier"] == "key" then
           self.world:add(Key(x, y), x, y, quadSize, quadSize)
+
         elseif entity["__identifier"] == "feather" then
           self.world:add(Feather(x, y), x, y, quadSize, quadSize)
+
         elseif entity["__identifier"] == "heart" then
           self.world:add(Heart(x, y), x, y, quadSize, quadSize)
+
         elseif entity["__identifier"] == "heart_container" then
           self.world:add(HeartContainer(x, y), x, y, quadSize, quadSize)
+
         elseif entity["__identifier"] == "key_check_zone" then
           self.world:add(KeyCheckZone("key"), x, y, width, height)
+
         elseif entity["__identifier"] == "feather_check_zone" then
           self.world:add(KeyCheckZone("feather"), x, y, width, height)
+
         elseif entity["__identifier"] == "post_combat_door_zone" then
           self.world:add(
             DoorOpenZone(x, y, width, height),
             x, y, width, height)
+
         elseif entity["__identifier"] == "enter_boss_trigger" then
           self.world:add(EnterTriggerZone(), x, y, width, height)
+
         elseif entity["__identifier"] == "dramatic_close_doors" then
           self.world:add(
             DramaticDoorCloseZone(x, y, width, height),
             x, y, width, height)
+
         elseif entity["__identifier"] == "egg" then
           local egg = Egg(x, y, self.world, self.eggs)
           self.world:add(egg, x, y, width, height)
           table.insert(self.eggs, egg)
+
         elseif entity["__identifier"] == "boss" then
           boss = Boss(x, y, self.world, self)
           self.world:add(boss, x, y, width, height)
+
         end
-      
       end
     end
   end 
@@ -121,22 +141,16 @@ function PlayState:init()
   self.world:add(self.player, self.player.x, self.player.y, quadSize, quadSize)
   self.camera = Camera(self.player)
   self.ui = UI(self.player)
-
-  -- Setting a background color doesn't work
-  -- self.red, self.green, self.blue = hex2rgb(level["bgColor"])
-  -- print(level["bgColor"])
-  -- print(self.red, self.green, self.blue)
 end
 
 function PlayState:update(dt)
-  -- Lots of stuff happening in here, see PlayerWalkState for the bulk of it
-
   -- Sort by z to put player last, so deleted items such as eggs don't try to 
   -- access themselves in the bump world.
   for _, item in pairs(sortByZ(self.world:getItems())) do
     item:update(dt)
   end
 
+  -- Open doors in main hall if all eggs are beaten
   if #self.eggs == 0 then
     sounds["bchh"]:play()
     local zonesToOpen = {}
@@ -173,6 +187,7 @@ function PlayState:update(dt)
     stateStacc:push(WinState(self.player, self.camera))
   end
 
+  -- Reload level on r press
   if love.keyboard.wasPressed("r") then
     stateStacc:pop()
     stateStacc:push(PlayState())
@@ -182,9 +197,6 @@ function PlayState:update(dt)
 end
 
 function PlayState:render()
-  -- Stays black for some reason
-  -- love.graphics.setBackgroundColor(self.red, self.green, self.blue, 1)
-  
   self.camera:render()
   -- Items get rendered from lowest to highest z-index
   for _, item in pairs(sortByZ(self.world:getItems())) do

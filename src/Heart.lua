@@ -1,4 +1,4 @@
--- Saves infos about tiles of the level
+-- Manages heart items that heal the player
 
 Heart = Class{}
 

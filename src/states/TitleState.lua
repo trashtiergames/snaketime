@@ -1,3 +1,5 @@
+-- Display title image, play title theme and listen for game start
+
 TitleState = Class{__includes = BaseState}
 
 function TitleState:init()

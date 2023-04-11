@@ -1,4 +1,4 @@
--- Saves infos about tiles of the level
+-- Manages the feather item, needed to unlock the feather door
 
 Feather = Class{}
 
