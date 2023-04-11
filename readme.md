@@ -1,7 +1,7 @@
 <img alt="Title image" src="/readme-images/title.png?raw=true">
 
 # Snaketime
-Slither your way through a small dungeon and bettle the fearsome final boss in Snaketime. This top-down, Zelda-style LÖVE2D game is my final project for CS50’s Introduction to Game Development. If you want to play, get LÖVE2D, download this repo, and run the whole folder with “love snaketime”.
+Slither your way through a small dungeon and battle the fearsome final boss in Snaketime. This top-down, Zelda-style LÖVE2D game is my final project for CS50’s Introduction to Game Development. If you want to play, get LÖVE2D, download this repo, and run the whole folder with ```love snaketime```.
 
 ## Loading the game
 <img alt="LDtk screenshot" src="/readme-images/ldtk-screen.png?raw=true">
@@ -60,7 +60,7 @@ And looks like this in the json file:
 ```
 "levels": [
 		{
-			...,
+			(...),
       "layerInstances": [
         {...},
         {...},
@@ -104,7 +104,7 @@ And like this in code:
 ```
 "levels": [
 		{
-			...,
+			(...),
       "layerInstances": [
         {...},
         {...},
