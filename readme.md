@@ -58,11 +58,10 @@ It first loads a layer of collisions, which looks like this in LDtk:
 And looks like this in the json file:
 
 ```
-"levels": [
-		{
-			(...),
-      "layerInstances": [
-        {...},
+"levels": [{
+	(...),
+    "layerInstances": [
+    	{...},
         {...},
         {
           "__identifier": "collisions",
@@ -102,29 +101,27 @@ And then it iterates over the list of tiles of the level, which look like this i
 And like this in code:
 
 ```
-"levels": [
-		{
-			(...),
-      "layerInstances": [
-        {...},
-        {...},
-        {...},
-        {
-					"__identifier": "tiles",
-					"__type": "Tiles",
-					"__cWid": 35,
-					"__cHei": 65,
-					"__gridSize": 16,
-					...,
-					"gridTiles": [
-						{ "px": [288,16], "src": [0,0], "f": 0, "t": 0, "d": [53] },
-						{ "px": [304,16], "src": [16,0], "f": 0, "t": 1, "d": [54] },
-						{ "px": [320,16], "src": [16,0], "f": 0, "t": 1, "d": [55] },
-						{ "px": [336,16], "src": [16,0], "f": 0, "t": 1, "d": [56] },
-						{ "px": [352,16], "src": [16,0], "f": 0, "t": 1, "d": [57] },
-						{ "px": [368,16], "src": [16,0], "f": 0, "t": 1, "d": [58] },
-
-            ...
+"levels": [{
+	(...),
+	"layerInstances": [
+	{...},
+    {...},
+    {...},
+    {
+		"__identifier": "tiles",
+		"__type": "Tiles",
+		"__cWid": 35,
+		"__cHei": 65,
+		"__gridSize": 16,
+		...,
+		"gridTiles": [
+			{ "px": [288,16], "src": [0,0], "f": 0, "t": 0, "d": [53] },
+			{ "px": [304,16], "src": [16,0], "f": 0, "t": 1, "d": [54] },
+			{ "px": [320,16], "src": [16,0], "f": 0, "t": 1, "d": [55] },
+			{ "px": [336,16], "src": [16,0], "f": 0, "t": 1, "d": [56] },
+			{ "px": [352,16], "src": [16,0], "f": 0, "t": 1, "d": [57] },
+			{ "px": [368,16], "src": [16,0], "f": 0, "t": 1, "d": [58] },
+      ...
 ```
 
 But hold up, what world is the tile being added to? This is where bump [bump](https://github.com/kikito/bump.lua) comes in, a library for simple AABB collision detection, which is a perfect fit for this game. To use it, we have to add everything in our game to a world object. Then, when e.g. moving the player object, bump will check if it collides with anything. What happens then depends on so-called filters that are written by the developer. Here is an example of the filter that the player object uses in Snaketime when moving around:
