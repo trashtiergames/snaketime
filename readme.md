@@ -60,8 +60,8 @@ And looks like this in the json file:
 ```
 "levels": [{
 	(...),
-    "layerInstances": [
-    	{...},
+	"layerInstances": [
+		{...},
         {...},
         {
           "__identifier": "collisions",
