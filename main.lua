@@ -80,6 +80,13 @@ function love.load()
   -- Load LDtk level data
   -- Keep this path so it works when loaded as a folder
   -- Maybe there's a doable fix for this out there
+  -- This should only work for MacOS
+  -- This worked, but not when dragging the game folder onto the love app.
+  -- local current_dir = os.getenv("PWD")
+  -- local current_dir = io.popen("cd"):read()
+  -- print("Current dir:", current_dir)
+  -- local ldtkPath = current_dir .. "/snaketime/game-3.ldtk"
+  -- print("ldtkPath:", ldtkPath)
   local ldtkFile = io.open("snaketime/game-3.ldtk", "r")
   local ldtkJson = ldtkFile:read("a")
   ldtkFile:close()
