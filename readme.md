@@ -7,6 +7,7 @@ Slither your way through a small dungeon and bettle the fearsome final boss in S
 
 ## Loading the game
 <img alt="LDtk screenshot" src="/readme-images/ldtk-screen.png?raw=true">
+
 Snaketime takes many of the concepts of week 5’s “Legend of Zelda” project, such as the basic state system for enemies, but my game also handles some aspect very differently, starting with the makeup of the levels. Snaketime is a single dungeon with pre-determined rooms, doors, enemies and items. Because this sort of level is difficult to design and create entirely in code, I opted to use [LDtk](https://ldtk.io), a 2D level editor. LDtk allows users to create levels based on tilemaps and export them to a single json file. The [structure](https://ldtk.io/json/#overview) looks something like this:   
 
 <img alt="LDtk JSON chart" src="/readme-images/ldtk-json-chart.png?raw=true">
