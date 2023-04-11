@@ -110,7 +110,7 @@ function PlayerWalkState:update(dt)
       sounds["blooip"]:play()
 
     elseif other.isHeart then
-      self.player.hp = self.player.hp + 2
+      self.player.hp = math.min(self.player.hp + 2, self.player.maxHp)
       self.world:remove(other)
       sounds["blooip"]:play()
 
