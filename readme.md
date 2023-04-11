@@ -123,7 +123,7 @@ And like this in json file again, where only tiles are listed that are "part of 
 	...
 ```
 
-But hold up, what world is the tile being added to? This is where bump [bump](https://github.com/kikito/bump.lua) comes in, a library for simple AABB collision detection, which is a perfect fit for this game. To use it, we have to add everything in our game to a world object. Then, when e.g. moving the player object, bump will check if it collides with anything. What happens then depends on so-called filters that are written by the developer. Here is an example of the filter that the player object uses in Snaketime when moving around:
+But hold up, what world is the tile being added to? This is where [bump](https://github.com/kikito/bump.lua) comes in, a library for simple AABB collision detection, which is a perfect fit for this game. To use it, we have to add everything in our game to a world object. Then, when e.g. moving the player object, bump will check if it collides with anything. What happens then depends on so-called filters that are written by the developer. Here is an example of the filter that the player object uses in Snaketime when moving around:
 
 ```
 function playerFilter(player, other)
@@ -176,7 +176,7 @@ end
 ## Doors
 <img alt="Doors" src="/readme-images/door-banner.png?raw=true">
 
-This bring us to a classic challenge to game developers, [doors](https://www.theverge.com/22328169/game-development-doors-design-difficult). Much as the PlayerWalkState checks for objects, it also checks for two zones related to doors. These zones are loaded into the world the same way as the other objects as well.
+This bring us to a classic challenge to game developers, [doors](https://www.theverge.com/22328169/game-development-doors-design-difficult). Much as the PlayerWalkState checks for objects, it also checks for two zones related to doors. These zones are loaded into the world from LDtk the same way as the other objects.
 
 ### KeyCheckZone
 <img alt="KeyCheckZone screenshot" src="/readme-images/key-check-zone.png?raw=true">
@@ -186,7 +186,7 @@ If the player collides with this zone, it checks if the player has a key (or a f
 ### EnterTriggerZone
 <img alt="EnterTriggerZone screenshot" src="/readme-images/enter-trigger-zones.png?raw=true">
 
-Three of these zones wait for the player just past the last door to the final room, where the boss is waiting (inactively). When the player collides with one of these zones, the game finds two different objects called DramaticDoorCloseZones, which lie over the entrance doors. As the name suggests, these doors will close dramatically when they player enters the boss room fully. The method for this is essentially the inverse of the KeyCheckZones. At the same time, the EnterTriggerZone will set the boss’s status to active, causing it to start making update() calls.
+Three of these zones wait for the player just past the last door to the final room, where the boss is waiting (inactively). When the player collides with one of these zones, the game finds two different objects called DramaticDoorCloseZones, which lie over the entrance doors. As the name suggests, these doors will close ✨ dramatically ✨ when they player enters the boss room fully. The method for this is essentially the inverse of the KeyCheckZones. At the same time, the EnterTriggerZone will set the boss’s status to active, causing it to start making update() calls.
 
 ### Door Tops
 <img alt="Door tops as seen in LDtk" src="/readme-images/ldtk-door-top.png?raw=true">
@@ -204,7 +204,7 @@ Using this system, doors are rendered over tiles (such as walls). Then, the play
 ## Art, animation and audio
 <img alt="Doodle collage" src="/readme-images/doodle-collage.png?raw=true">
 
-I attempted to create my own art and aniomations for this game. To import and manage the animations, I used [anim8](https://github.com/kikito/anim8). Each animation was exported as a row of images and then assigned to different states using the library. The WinState shows a simple example of a single animation:
+I attempted to create my own art and animations for this game. To import and manage the animations, I used [anim8](https://github.com/kikito/anim8). Each animation was exported as a row of images and then assigned to different states using the library. The WinState shows a simple example of a single animation:
 
 ```
 function WinState:init(player, camera)
