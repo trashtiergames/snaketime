@@ -1,4 +1,4 @@
-![Title image](/art/title.png?raw=true)
+![Title image](/readme-images/title.png?raw=true)
 
 # Snaketime
 asd
