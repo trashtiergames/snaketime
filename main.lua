@@ -22,9 +22,7 @@ function love.load()
   )
 
   -- Load LDtk level data
-  local ldtkFile = io.open("snaketime/game-3.ldtk", "r")
-  local ldtkJson = ldtkFile:read("a")
-  ldtkFile:close()
+  local ldtkJson = love.filesystem.read("game-3.ldtk")
   ldtk = json.decode(ldtkJson)
   level = ldtk.levels[1]
 
