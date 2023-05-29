@@ -1,5 +1,5 @@
 -- This main script for the game snaketime loads all the assets as well as 
--- the level, and 
+-- the level, and initializes the game with play and title states.
 
 require "src/dependencies"
 
